@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  // Use IPv4 loopback to avoid macOS resolving localhost to AirPlay/::1
+  baseURL: 'http://127.0.0.1:5000/api',
 });
 
 // Add a request interceptor to include the auth token in headers

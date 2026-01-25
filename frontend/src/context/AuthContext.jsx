@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
           }
         } catch (error) {
+          console.error('Auth session validation failed:', error);
           localStorage.removeItem('token');
           setUser(null);
         }
@@ -62,4 +63,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
-import SubDomainDetails from './pages/SubDomainDetails';
+import SubStreamDetails from './pages/SubStreamDetails';
 import RoleDetails from './pages/RoleDetails';
 import AdminDashboard from './pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -46,10 +46,10 @@ function App() {
                 } 
               />
               <Route 
-                path="/subdomain/:id" 
+                path="/streams/:streamSlug/substreams/:subStreamSlug" 
                 element={
                   <ProtectedRoute>
-                    <SubDomainDetails />
+                    <SubStreamDetails />
                   </ProtectedRoute>
                 } 
               />
