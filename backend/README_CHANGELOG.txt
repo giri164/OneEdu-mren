@@ -1,0 +1,1 @@
+Admin enhancements: Courses now link to roles/subdomains/streams; user role details fetch updated; admin UI supports hierarchy selection and creation of streams/subdomains/roles.
