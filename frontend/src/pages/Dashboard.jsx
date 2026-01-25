@@ -64,23 +64,23 @@ const Dashboard = () => {
     );
   }
 
-  // Determine if user has selected a stream
-  // We check for both stream existence and if it's a valid ID (not null/null-string)
+  // Determine if user has selected a stream and pull its slug
   const hasStream = user?.stream && typeof user.stream === 'string' && user.stream.length > 5;
+  const activeStream = hasStream ? streams.find((s) => s._id === user.stream) : null;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-          <h1 className="text-4xl font-extrabold text-gray-900 flex items-center gap-3">
+          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-slate-100 flex items-center gap-3">
             Welcome back, {user?.name}! <Sparkles className="text-yellow-400" />
           </h1>
-          <p className="text-lg text-gray-600 mt-2">Ready to master new skills today?</p>
+          <p className="text-lg text-gray-600 dark:text-slate-300 mt-2">Ready to master new skills today?</p>
         </div>
         {hasStream && (
           <button 
             onClick={() => handleStreamSelect(null)}
-            className="text-sm font-bold text-gray-500 hover:text-red-500 border border-gray-200 px-4 py-2 rounded-xl transition hover:border-red-200"
+            className="text-sm font-bold text-gray-500 dark:text-slate-300 hover:text-red-500 border border-gray-200 dark:border-slate-700 px-4 py-2 rounded-xl transition hover:border-red-200 dark:hover:border-red-500"
           >
             Change Stream
           </button>
@@ -90,8 +90,8 @@ const Dashboard = () => {
       {!hasStream ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Choose Your Career Foundation</h2>
-            <p className="text-gray-600 text-lg">Select a stream to unlock specialized roadmaps, expert-curated courses, and real-time progress tracking.</p>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100 mb-4">Choose Your Career Foundation</h2>
+            <p className="text-gray-600 dark:text-slate-300 text-lg">Select a stream to unlock specialized roadmaps, expert-curated courses, and real-time progress tracking.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -99,13 +99,13 @@ const Dashboard = () => {
               <div
                 key={s._id}
                 onClick={() => handleStreamSelect(s._id)}
-                className="group relative bg-white border-2 border-gray-100 rounded-3xl p-8 cursor-pointer hover:border-primary hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                className="group relative bg-white dark:bg-slate-900 border-2 border-gray-100 dark:border-slate-800 rounded-3xl p-8 cursor-pointer hover:border-primary hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
               >
                 <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Compass size={32} />
                 </div>
-                <h3 className="text-2xl font-bold mb-3 text-gray-900 group-hover:text-primary transition">{s.name}</h3>
-                <p className="text-gray-500 text-sm mb-6 leading-relaxed">{s.description}</p>
+                <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-slate-100 group-hover:text-primary transition">{s.name}</h3>
+                <p className="text-gray-500 dark:text-slate-300 text-sm mb-6 leading-relaxed">{s.description}</p>
                 <div className="flex items-center gap-2 text-primary font-bold">
                   Start Learning <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
                 </div>
@@ -128,7 +128,7 @@ const Dashboard = () => {
               <div className="text-3xl font-black">{userStream?.name}</div>
             </div>
 
-            <div className="bg-white border-2 border-orange-50 p-8 rounded-3xl shadow-sm hover:shadow-md transition">
+            <div className="bg-white dark:bg-slate-900 border-2 border-orange-50 dark:border-slate-800 p-8 rounded-3xl shadow-sm hover:shadow-md transition">
               <div className="flex items-center gap-3 mb-4">
                 <div className="bg-orange-100 p-2 rounded-lg text-secondary">
                   <Target size={20} />
@@ -138,7 +138,7 @@ const Dashboard = () => {
               <div className="text-4xl font-black text-gray-900">{userStream?.subDomains?.length || 0}</div>
             </div>
 
-            <div className="bg-white border-2 border-orange-50 p-8 rounded-3xl shadow-sm hover:shadow-md transition">
+            <div className="bg-white dark:bg-slate-900 border-2 border-orange-50 dark:border-slate-800 p-8 rounded-3xl shadow-sm hover:shadow-md transition">
               <div className="flex items-center gap-3 mb-4">
                 <div className="bg-amber-100 p-2 rounded-lg text-accent">
                   <Award size={20} />
@@ -179,20 +179,20 @@ const Dashboard = () => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {userStream?.subDomains?.map((sd) => (
-                  <div key={sd._id} className="group bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+                  <div key={sd._id} className="group bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
                     <div className="p-8">
                       <div className="flex justify-between items-start mb-6">
                         <div className="bg-primary/10 p-4 rounded-2xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
                           <Compass size={28} />
                         </div>
-                        <span className="text-xs font-black uppercase tracking-widest text-gray-400">Roadmap Ready</span>
+                        <span className="text-xs font-black uppercase tracking-widest text-gray-400 dark:text-slate-400">Roadmap Ready</span>
                       </div>
-                      <h3 className="text-2xl font-bold mb-4 text-gray-900 group-hover:text-primary transition">{sd.name}</h3>
-                      <p className="text-gray-600 text-sm mb-8 leading-relaxed line-clamp-3 overflow-hidden" style={{ minHeight: '4.5rem' }}>
+                      <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-slate-100 group-hover:text-primary transition">{sd.name}</h3>
+                      <p className="text-gray-600 dark:text-slate-300 text-sm mb-8 leading-relaxed line-clamp-3 overflow-hidden" style={{ minHeight: '4.5rem' }}>
                         {sd.description}
                       </p>
                       <Link
-                        to={`/subdomain/${sd._id}`}
+                        to={activeStream?.slug && sd.slug ? `/streams/${activeStream.slug}/substreams/${sd.slug}` : '/dashboard'}
                         className="w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white px-6 py-4 rounded-2xl font-bold hover:bg-primary transition-all shadow-lg hover:shadow-primary/30"
                       >
                         Explore Roles <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />

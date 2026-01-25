@@ -41,7 +41,7 @@ exports.getCareerPath = async (req, res) => {
 
         const subDomains = await SubDomain.find({ stream: streamId });
         
-        res.status(200).json({ success: true, data: { name: stream.name, subDomains } });
+        res.status(200).json({ success: true, data: { _id: stream._id, name: stream.name, slug: stream.slug, subDomains } });
     } catch (err) {
         console.error('Error in getCareerPath:', err);
         res.status(400).json({ success: false, message: err.message });
@@ -51,7 +51,8 @@ exports.getCareerPath = async (req, res) => {
 // Get roles for a subdomain
 exports.getRoles = async (req, res) => {
     try {
-        const roles = await Role.find({ subDomain: req.params.subdomainId }).populate('subDomain');
+        const subDomainId = req.params.substreamId || req.params.subdomainId;
+        const roles = await Role.find({ subDomain: subDomainId }).populate('subDomain');
         res.status(200).json({ success: true, data: roles });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
@@ -198,5 +199,62 @@ exports.submitFeedback = async (req, res) => {
         res.status(201).json({ success: true, data: feedback });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Courses by stream/substream slug with user progress + roles + jobs
+exports.getCoursesBySubStream = async (req, res) => {
+    try {
+        const { streamSlug, subStreamSlug } = req.params;
+
+        const stream = await Stream.findOne({ slug: streamSlug });
+        if (!stream) {
+            return res.status(404).json({ success: false, message: 'Stream not found' });
+        }
+
+        const subStream = await SubDomain.findOne({ slug: subStreamSlug, stream: stream._id });
+        if (!subStream) {
+            return res.status(404).json({ success: false, message: 'Sub-stream not found' });
+        }
+
+        const roles = await Role.find({ subDomain: subStream._id });
+        const roleIds = roles.map(r => r._id);
+
+        const courses = await Course.find({
+            $or: [
+                { subDomain: subStream._id },
+                { role: { $in: roleIds } }
+            ]
+        }).sort({ createdAt: -1 });
+
+        const jobs = await Job.find({ role: { $in: roleIds } }).sort({ createdAt: -1 });
+
+        const user = await User.findById(req.user.id);
+        const courseProgress = user?.courseProgress || [];
+        const progressByCourse = new Map(
+            courseProgress.map(cp => [cp.course?.toString(), cp])
+        );
+
+        const coursesWithProgress = courses.map(c => {
+            const prog = progressByCourse.get(c._id.toString());
+            return {
+                ...c.toObject(),
+                progress: prog || null
+            };
+        });
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                stream,
+                subStream,
+                roles,
+                courses: coursesWithProgress,
+                jobs
+            }
+        });
+    } catch (err) {
+        console.error('Error in getCoursesBySubStream:', err);
+        return res.status(400).json({ success: false, message: err.message });
     }
 };

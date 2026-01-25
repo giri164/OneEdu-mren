@@ -6,6 +6,15 @@ const Job = require('../models/Job');
 const Feedback = require('../models/Feedback');
 
 // --- Stream Controllers ---
+exports.getStreams = async (req, res) => {
+    try {
+        const streams = await Stream.find();
+        res.status(200).json({ success: true, data: streams });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
 exports.createStream = async (req, res) => {
     try {
         const stream = await Stream.create(req.body);
@@ -34,7 +43,7 @@ exports.deleteStream = async (req, res) => {
 };
 
 // --- Subdomain Controllers ---
-exports.createSubDomain = async (req, res) => {
+exports.createSubStream = async (req, res) => {
     try {
         const subdomain = await SubDomain.create(req.body);
         res.status(201).json({ success: true, data: subdomain });
@@ -43,7 +52,19 @@ exports.createSubDomain = async (req, res) => {
     }
 };
 
-exports.deleteSubDomain = async (req, res) => {
+exports.updateSubStream = async (req, res) => {
+    try {
+        const subdomain = await SubDomain.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if (!subdomain) {
+            return res.status(404).json({ success: false, message: 'Sub-stream not found' });
+        }
+        res.status(200).json({ success: true, data: subdomain });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+exports.deleteSubStream = async (req, res) => {
     try {
         await SubDomain.findByIdAndDelete(req.params.id);
         res.status(200).json({ success: true, data: {} });

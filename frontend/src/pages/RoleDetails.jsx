@@ -119,6 +119,11 @@ const RoleDetails = () => {
                                 </span>
                               </div>
                               <p className="text-sm text-gray-600">{course.provider} • {course.duration}</p>
+                              {course.type === 'Paid' && course.amount !== undefined && course.amount !== null && (
+                                <div className="flex items-center gap-1 text-sm font-bold text-amber-600 mt-1">
+                                  <DollarSign size={14} /> {course.amount}
+                                </div>
+                              )}
                             </div>
 
                             {/* Progress Section */}
@@ -200,9 +205,14 @@ const RoleDetails = () => {
                                             className="flex items-center justify-between text-xs font-semibold text-primary hover:underline"
                                           >
                                             <span>• {cert.name}</span>
-                                            <span className={`px-2 py-0.5 rounded-full text-[10px] ${cert.type === 'Paid' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
-                                              {cert.type}
-                                            </span>
+                                              <span className="flex items-center gap-2">
+                                                <span className={`px-2 py-0.5 rounded-full text-[10px] ${cert.type === 'Paid' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                                                  {cert.type}
+                                                </span>
+                                                {cert.type === 'Paid' && cert.amount !== undefined && cert.amount !== null && (
+                                                  <span className="text-[10px] font-bold text-amber-700 flex items-center gap-1"><DollarSign size={10} />{cert.amount}</span>
+                                                )}
+                                              </span>
                                           </a>
                                         ))}
                                       </div>
@@ -265,6 +275,11 @@ const RoleDetails = () => {
                                 </span>
                               </div>
                               <p className="text-sm text-gray-600">{course.provider} • {course.duration}</p>
+                              {course.type === 'Paid' && course.amount !== undefined && course.amount !== null && (
+                                <div className="flex items-center gap-1 text-sm font-bold text-amber-600 mt-1">
+                                  <DollarSign size={14} /> {course.amount}
+                                </div>
+                              )}
                             </div>
 
                             {/* Progress Section */}
@@ -335,8 +350,13 @@ const RoleDetails = () => {
                                             className="flex items-center justify-between text-xs font-semibold text-primary hover:underline"
                                           >
                                             <span>• {cert.name}</span>
-                                            <span className={`px-2 py-0.5 rounded-full text-[10px] ${cert.type === 'Paid' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
-                                              {cert.type}
+                                            <span className="flex items-center gap-2">
+                                              <span className={`px-2 py-0.5 rounded-full text-[10px] ${cert.type === 'Paid' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                                                {cert.type}
+                                              </span>
+                                              {cert.type === 'Paid' && cert.amount !== undefined && cert.amount !== null && (
+                                                <span className="text-[10px] font-bold text-amber-700 flex items-center gap-1"><DollarSign size={10} />{cert.amount}</span>
+                                              )}
                                             </span>
                                           </a>
                                         ))}

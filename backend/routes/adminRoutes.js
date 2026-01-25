@@ -4,7 +4,7 @@ const {
     createSubStream, updateSubStream, deleteSubStream,
     getAllRoles, createRole, updateRole, deleteRole,
     getAllCourses, addCourse, updateCourse, deleteCourse,
-    addJob, getAllFeedback, getAllCertificates, addCertificate, updateCertificate, deleteCertificate
+    addJob, getAllFeedback
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
@@ -33,10 +33,6 @@ router.post('/courses', addCourse);
 router.put('/courses/:id', updateCourse);
 router.delete('/courses/:id', deleteCourse);
 router.post('/jobs', addJob);
-router.get('/certificates', getAllCertificates);
-router.post('/certificates', addCertificate);
-router.put('/certificates/:id', updateCertificate);
-router.delete('/certificates/:id', deleteCertificate);
 
 router.get('/feedback', getAllFeedback);
 
