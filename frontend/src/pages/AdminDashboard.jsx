@@ -262,6 +262,7 @@ const AdminDashboard = () => {
           formData={formData}
           setFormData={setFormData}
           subDomains={subDomains}
+          streams={data.streams}
           roles={roles}
           setShowModal={setShowModal}
           handleSaveCourse={handleSaveCourse}
@@ -466,6 +467,7 @@ const CourseModal = ({
   formData,
   setFormData,
   subDomains,
+  streams,
   roles,
   setShowModal,
   handleSaveCourse,
@@ -494,7 +496,7 @@ const CourseModal = ({
         <Input label="Skill *" name="skill" value={formData.skill} onChange={handleFormChange} required placeholder="e.g., Python, Machine Learning" />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Select label="Stream" name="stream" value={formData.stream} onChange={(e) => handleStreamChange(e.target.value)} options={subDomains.length ? subDomains : []} streamsMode />
+          <Select label="Stream" name="stream" value={formData.stream} onChange={(e) => handleStreamChange(e.target.value)} options={streams || []} streamsMode />
           <Select label="SubDomain" name="subDomain" value={formData.subDomain} onChange={(e) => handleSubDomainChange(e.target.value)} options={subDomains} disabled={!formData.stream} />
           <Select label="Role" name="role" value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value })} options={roles} disabled={!formData.subDomain} rolesMode />
         </div>

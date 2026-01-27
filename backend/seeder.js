@@ -26,7 +26,7 @@ const seedData = async () => {
         await User.create({
             name: 'admin',
             email: 'admin@gmail.com',
-            password: 'admin',
+            password: 'admin12345',
             role: 'admin'
         });
 
@@ -799,7 +799,7 @@ const seedData = async () => {
                 role: mlEngineer._id,
                 company: 'Google',
                 location: 'London',
-                salaryRange: '£70k-£110k',
+                salaryRange: '$70k-$110k',
                 link: 'https://google.com',
                 description: 'Prototype and ship ML models for ads quality.'
             },
@@ -835,7 +835,7 @@ const seedData = async () => {
                 role: dataScientist._id,
                 company: 'Spotify',
                 location: 'Stockholm, SE',
-                salaryRange: '€80k-€130k',
+                salaryRange: '$80k-$130k',
                 link: 'https://www.lifeatspotify.com',
                 description: 'Model user behavior to improve discovery and retention.'
             },
@@ -853,7 +853,7 @@ const seedData = async () => {
                 role: iotEngineer._id,
                 company: 'Bosch',
                 location: 'Stuttgart, DE',
-                salaryRange: '€70k-€100k',
+                salaryRange: '$70k-$100k',
                 link: 'https://www.bosch.com/careers/',
                 description: 'Design secure firmware and telemetry pipelines.'
             },
@@ -862,7 +862,7 @@ const seedData = async () => {
                 role: iotEngineer._id,
                 company: 'Siemens',
                 location: 'Munich, DE',
-                salaryRange: '€65k-€95k',
+                salaryRange: '$65k-$95k',
                 link: 'https://jobs.siemens.com',
                 description: 'Develop edge compute apps, OTA updates, and device security.'
             },
@@ -871,7 +871,7 @@ const seedData = async () => {
                 role: iotEngineer._id,
                 company: 'AWS',
                 location: 'Dublin, IE',
-                salaryRange: '€80k-€120k',
+                salaryRange: '$80k-$120k',
                 link: 'https://aws.amazon.com/careers/',
                 description: 'Build device onboarding, fleet mgmt, and observability.'
             },
@@ -880,7 +880,7 @@ const seedData = async () => {
                 role: automotiveEngineer._id,
                 company: 'Mercedes-Benz',
                 location: 'Bangalore, IN',
-                salaryRange: '₹12L-₹20L',
+                salaryRange: '$12L-$20L',
                 link: 'https://group.mercedes-benz.com/careers/',
                 description: 'Simulate chassis and validate durability.'
             },
@@ -889,7 +889,7 @@ const seedData = async () => {
                 role: roboticsEngineer._id,
                 company: 'ABB',
                 location: 'Helsinki, FI',
-                salaryRange: '€60k-€90k',
+                salaryRange: '$60k-$90k',
                 link: 'https://careers.abb',
                 description: 'Deploy robotic cells and safety logic.'
             },
@@ -916,7 +916,7 @@ const seedData = async () => {
                 role: embeddedFirmware._id,
                 company: 'NXP',
                 location: 'Eindhoven, NL',
-                salaryRange: '€55k-€85k',
+                salaryRange: '$55k-$85k',
                 link: 'https://www.nxp.com/company/careers',
                 description: 'Develop RTOS drivers and secure boot.'
             },
@@ -925,7 +925,7 @@ const seedData = async () => {
                 role: rfEngineer._id,
                 company: 'Ericsson',
                 location: 'Stockholm, SE',
-                salaryRange: '€60k-€95k',
+                salaryRange: '$60k-$95k',
                 link: 'https://www.ericsson.com/en/careers',
                 description: 'Prototype 5G radio features and validate KPIs.'
             },
@@ -934,7 +934,7 @@ const seedData = async () => {
                 role: powerEngineer._id,
                 company: 'Siemens Energy',
                 location: 'Munich, DE',
-                salaryRange: '€65k-€100k',
+                salaryRange: '$65k-$100k',
                 link: 'https://jobs.siemens-energy.com',
                 description: 'Perform load flow and protection coordination.'
             },
@@ -943,7 +943,7 @@ const seedData = async () => {
                 role: renewableAnalyst._id,
                 company: 'ENGIE',
                 location: 'Paris, FR',
-                salaryRange: '€55k-€90k',
+                salaryRange: '$55k-$90k',
                 link: 'https://www.engie.com/en/candidates',
                 description: 'Model hybrid solar-wind storage portfolios.'
             }
