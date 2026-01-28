@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
+import SidePanel from './components/SidePanel';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -21,8 +22,10 @@ function App() {
         <Router>
           <div className="flex flex-col min-h-screen bg-cream text-gray-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
             <Navbar />
-            <main className="flex-grow bg-cream dark:bg-slate-950">
-              <Routes>
+            <div className="flex flex-1">
+              <SidePanel />
+              <main className="flex-grow bg-cream dark:bg-slate-950">
+                <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
@@ -74,7 +77,8 @@ function App() {
                 } 
               />
               </Routes>
-            </main>
+              </main>
+            </div>
             <Footer />
           </div>
         </Router>

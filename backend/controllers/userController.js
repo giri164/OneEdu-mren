@@ -10,7 +10,19 @@ const Feedback = require('../models/Feedback');
 exports.getStreams = async (req, res) => {
     try {
         const streams = await Stream.find();
-        res.status(200).json({ success: true, data: streams });
+        
+        // Fetch subDomains for each stream
+        const streamsWithSubDomains = await Promise.all(
+            streams.map(async (stream) => {
+                const subDomains = await SubDomain.find({ stream: stream._id });
+                return {
+                    ...stream.toObject(),
+                    subDomains
+                };
+            })
+        );
+        
+        res.status(200).json({ success: true, data: streamsWithSubDomains });
     } catch (err) {
         console.error('Error in getStreams:', err);
         res.status(400).json({ success: false, message: err.message });
