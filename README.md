@@ -49,4 +49,15 @@ OneEdu is a centralized career guidance system designed to help Intermediate and
    npm run dev
    ```
 
-4. 
+4. **Access the application**:
+   - Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Default Credentials
+- **User**: Register a new account or use seeded data if available.
+
+## Project Structure
+- `/backend`: API server, models, controllers, and routes.
+- `/frontend`: React client with Tailwind CSS and context-based state management.
+
+# One-EDU-my
+
