@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const LoginLog = require('../models/LoginLog');
 const jwt = require('jsonwebtoken');
 
 // Register user
@@ -34,6 +35,15 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ email }).select('+password');
 
         if (!user) {
+            // Log failed login attempt
+            await LoginLog.create({
+                email,
+                userName: 'Unknown',
+                status: 'failed',
+                failureReason: 'User not found',
+                ipAddress: req.ip || req.connection.remoteAddress,
+                userAgent: req.get('user-agent')
+            });
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
@@ -41,8 +51,28 @@ exports.login = async (req, res) => {
         const isMatch = await user.matchPassword(password);
 
         if (!isMatch) {
+            // Log failed login attempt
+            await LoginLog.create({
+                user: user._id,
+                email: user.email,
+                userName: user.name,
+                status: 'failed',
+                failureReason: 'Invalid password',
+                ipAddress: req.ip || req.connection.remoteAddress,
+                userAgent: req.get('user-agent')
+            });
             return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
+
+        // Log successful login
+        await LoginLog.create({
+            user: user._id,
+            email: user.email,
+            userName: user.name,
+            status: 'success',
+            ipAddress: req.ip || req.connection.remoteAddress,
+            userAgent: req.get('user-agent')
+        });
 
         sendTokenResponse(user, 200, res);
     } catch (err) {

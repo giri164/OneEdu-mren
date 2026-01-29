@@ -40,3 +40,41 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Custom Scrollbar Styling */
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Dark mode scrollbar */
+.dark .scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark .scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Firefox scrollbar */
+.scrollbar {
+  scrollbar-color: #d1d5db transparent;
+  scrollbar-width: thin;
+}
+
+.dark .scrollbar {
+  scrollbar-color: #475569 transparent;
+}

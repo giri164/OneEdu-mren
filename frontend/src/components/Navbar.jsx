@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { LogOut, User, LayoutDashboard, Settings, Sun, Moon } from 'lucide-react';
+import { LogOut, User, LayoutDashboard, Settings, Sun, Moon, MessageSquare } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
@@ -14,12 +14,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-cream dark:bg-slate-900 shadow-sm border-b border-secondary/10 dark:border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-cream dark:bg-slate-900 shadow-sm border-b border-secondary/10 dark:border-slate-800 transition-colors">
+      <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="text-2xl font-bold text-primary dark:text-amber-200">
-              OneEdu
+          <div className="flex items-center gap-3">
+            {/* Eagle Logo */}
+            <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition group">
+              <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🦅</span>
+              <span className="text-2xl font-bold text-primary dark:text-amber-200">
+                OneEdu
+              </span>
             </Link>
           </div>
           <div className="flex items-center space-x-4">
@@ -40,10 +44,19 @@ const Navbar = () => {
                     Admin Panel
                   </Link>
                 ) : (
-                  <Link to="/dashboard" className="text-gray-700 dark:text-amber-100 hover:text-primary dark:hover:text-amber-200 flex items-center gap-1">
-                    <LayoutDashboard size={18} />
-                    Dashboard
-                  </Link>
+                  <>
+                    <Link to="/dashboard" className="text-gray-700 dark:text-amber-100 hover:text-primary dark:hover:text-amber-200 flex items-center gap-1">
+                      <LayoutDashboard size={18} />
+                      Dashboard
+                    </Link>
+                    <Link
+                      to="/feedback"
+                      className="p-2 rounded-full border border-transparent hover:border-orange-400 dark:hover:border-orange-400 bg-gradient-to-br from-orange-400 to-red-500 text-white transition hover:shadow-lg shadow-md transform hover:scale-110 hover:from-orange-500 hover:to-red-600"
+                      title="Send Feedback"
+                    >
+                      <MessageSquare size={18} />
+                    </Link>
+                  </>
                 )}
                 <Link to="/profile" className="flex items-center gap-2 border-l pl-4 border-gray-200 dark:border-slate-800 hover:opacity-80 transition">
                   <img

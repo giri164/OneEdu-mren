@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 import { 
@@ -10,6 +10,7 @@ import {
 const RoleDetails = () => {
   const { id } = useParams();
   const { user, updateUser } = useAuth();
+  const navigate = useNavigate();
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updatingCourse, setUpdatingCourse] = useState(null);
@@ -60,23 +61,31 @@ const RoleDetails = () => {
   if (!role) return <div className="p-10 text-center text-red-600">Role not found.</div>;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 min-h-[calc(100vh-200px)]">
-      <Link to={`/subdomain/${role.subDomain._id}`} className="flex items-center gap-2 text-primary hover:text-secondary mb-8 font-bold transition">
+    <div className="max-w-7xl mx-auto px-4 py-8 min-h-[calc(100vh-200px)] pt-24 pb-32">
+      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-primary hover:text-secondary mb-8 font-bold transition">
         <ArrowLeft size={20} /> Back to Roles
-      </Link>
+      </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-10">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-primary to-secondary rounded-3xl p-8 text-white shadow-xl">
-            <h1 className="text-4xl font-extrabold mb-4">{role.title}</h1>
-            <p className="text-xl text-blue-100 leading-relaxed">{role.description}</p>
-            <div className="mt-6 flex flex-wrap gap-2">
-              {role.skills.map((skill) => (
-                <span key={skill} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold backdrop-blur">
-                  {skill}
-                </span>
-              ))}
+          {/* Header with Background Image */}
+          <div className="relative rounded-3xl overflow-hidden shadow-xl h-80">
+            <img 
+              src="https://images.unsplash.com/photo-1522202176988-696ce0213d3a?w=1200&h=400&fit=crop&q=80"
+              alt="Role header"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/70 to-secondary/70"></div>
+            <div className="absolute inset-0 flex flex-col justify-end p-8 text-white">
+              <h1 className="text-4xl font-extrabold mb-4">{role.title}</h1>
+              <p className="text-xl text-blue-100 leading-relaxed">{role.description}</p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {role.skills.map((skill) => (
+                  <span key={skill} className="bg-white/20 text-white px-4 py-2 rounded-full text-sm font-semibold backdrop-blur">
+                    {skill}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
 

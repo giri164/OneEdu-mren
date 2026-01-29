@@ -41,11 +41,27 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4 bg-cream dark:bg-slate-950 transition-colors">
-      <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-slate-800 text-gray-900 dark:text-slate-100">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-24 pb-24 relative overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 opacity-20">
+        <img 
+          src="https://images.unsplash.com/photo-1553531088-fde7e220b50b?w=1200&h=800&fit=crop&q=80"
+          alt="background"
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Animated Gradient Background */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/30 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+
+      <div className="max-w-md w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-gray-100 dark:border-slate-800 text-gray-900 dark:text-slate-100 relative z-10">
         <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-2xl">🎓</span>
+          </div>
           <h2 className="text-3xl font-bold text-gray-900 dark:text-slate-100">Welcome Back</h2>
-          <p className="text-gray-500 dark:text-slate-300 mt-2">Sign in to your OneEdu account</p>
+          <p className="text-gray-600 dark:text-slate-300 mt-2">Sign in to your OneEdu account</p>
         </div>
 
         {error && (

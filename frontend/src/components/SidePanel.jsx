@@ -67,7 +67,7 @@ const SidePanel = () => {
 
       {/* Side Panel */}
       <aside
-        className="fixed left-0 top-16 h-[calc(100vh-64px)] w-80 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 transition-all duration-300 overflow-y-auto z-40 md:translate-x-0"
+        className="fixed left-0 top-16 h-[calc(100vh-64px)] w-80 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 transition-all duration-300 overflow-y-auto z-40 md:translate-x-0 scrollbar scrollbar-thumb-gray-300 dark:scrollbar-thumb-slate-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-slate-500"
       >
         <div className="p-6">
           {/* Header */}

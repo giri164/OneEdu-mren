@@ -69,7 +69,7 @@ const Dashboard = () => {
   const activeStream = hasStream ? streams.find((s) => s._id === user.stream) : null;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-12 pt-24 pb-32">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
           <h1 className="text-4xl font-extrabold text-gray-900 dark:text-slate-100 flex items-center gap-3">
@@ -95,22 +95,57 @@ const Dashboard = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {streams.map((s) => (
+            {streams.map((s) => {
+              // Map stream names to specific background images
+              const getStreamImage = (streamName) => {
+                const name = streamName.toLowerCase();
+                
+                if (name.includes('computer science')) {
+                  return 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=600&h=450&fit=crop&q=80';
+                } else if (name.includes('mechanical')) {
+                  return 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=450&fit=crop&q=80';
+                } else if (name.includes('civil')) {
+                  return 'https://images.unsplash.com/photo-1486621145735-29aeb4a9be3e?w=600&h=450&fit=crop&q=80';
+                } else if (name.includes('electronics') && name.includes('communication')) {
+                  return 'https://images.unsplash.com/photo-1625948515291-69613efd103f?w=600&h=450&fit=crop&q=80';
+                } else if (name.includes('electrical') && name.includes('electronics')) {
+                  return 'https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=600&h=450&fit=crop&q=80';
+                }
+                return 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=450&fit=crop&q=80';
+              };
+
+              const streamImage = getStreamImage(s.name);
+
+              return (
               <div
                 key={s._id}
                 onClick={() => handleStreamSelect(s._id)}
-                className="group relative bg-white dark:bg-slate-900 border-2 border-gray-100 dark:border-slate-800 rounded-3xl p-8 cursor-pointer hover:border-primary hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                className="group relative bg-white dark:bg-slate-900 border-2 border-gray-100 dark:border-slate-800 rounded-3xl overflow-hidden cursor-pointer hover:border-primary hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
               >
-                <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                  <Compass size={32} />
+                {/* Background Image */}
+                <div className="relative h-40 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
+                  <img 
+                    src={streamImage}
+                    alt={s.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
                 </div>
-                <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-slate-100 group-hover:text-primary transition">{s.name}</h3>
-                <p className="text-gray-500 dark:text-slate-300 text-sm mb-6 leading-relaxed">{s.description}</p>
-                <div className="flex items-center gap-2 text-primary font-bold">
-                  Start Learning <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+
+                {/* Content */}
+                <div className="p-8">
+                  <div className="bg-primary/10 w-16 h-16 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                    <Compass size={32} />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3 text-gray-900 dark:text-slate-100 group-hover:text-primary transition">{s.name}</h3>
+                  <p className="text-gray-500 dark:text-slate-300 text-sm mb-6 leading-relaxed">{s.description}</p>
+                  <div className="flex items-center gap-2 text-primary font-bold">
+                    Start Learning <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+                  </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ) : (
@@ -178,8 +213,52 @@ const Dashboard = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {userStream?.subDomains?.map((sd) => (
+                {userStream?.subDomains?.map((sd) => {
+                  // Map sub-domain names to specific background images
+                  const getSubDomainImage = (subDomainName) => {
+                    const name = subDomainName.toLowerCase();
+                    if (name.includes('ai') || name.includes('machine learning')) {
+                      return 'https://images.unsplash.com/photo-1677442179019-21780ecad995?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('data science')) {
+                      return 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('cyber security')) {
+                      return 'https://images.unsplash.com/photo-1550355291-bbee04a92027?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('iot') || name.includes('internet of things')) {
+                      return 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('automotive')) {
+                      return 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('robotics')) {
+                      return 'https://images.unsplash.com/photo-1635373067958-d7d165378995?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('structural')) {
+                      return 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('transportation')) {
+                      return 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('embedded')) {
+                      return 'https://images.unsplash.com/photo-1518611505868-48510c2e022b?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('communication') || name.includes('wireless')) {
+                      return 'https://images.unsplash.com/photo-1606933248051-5ce98bebdc0e?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('power systems')) {
+                      return 'https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=600&h=400&fit=crop&q=80';
+                    } else if (name.includes('renewable')) {
+                      return 'https://images.unsplash.com/photo-1509391366360-2e938286db4c?w=600&h=400&fit=crop&q=80';
+                    }
+                    return 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=400&fit=crop&q=80';
+                  };
+
+                  const subDomainImage = getSubDomainImage(sd.name);
+
+                  return (
                   <div key={sd._id} className="group bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-800 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+                    {/* Sub-Domain Image */}
+                    <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
+                      <img 
+                        src={subDomainImage}
+                        alt={sd.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    </div>
+
                     <div className="p-8">
                       <div className="flex justify-between items-start mb-6">
                         <div className="bg-primary/10 p-4 rounded-2xl text-primary group-hover:bg-primary group-hover:text-white transition-colors">
@@ -199,7 +278,8 @@ const Dashboard = () => {
                       </Link>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

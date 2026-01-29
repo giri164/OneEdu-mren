@@ -12,19 +12,19 @@ import Profile from './pages/Profile';
 import SubStreamDetails from './pages/SubStreamDetails';
 import RoleDetails from './pages/RoleDetails';
 import AdminDashboard from './pages/AdminDashboard';
+import Feedback from './pages/Feedback';
 import ProtectedRoute from './components/ProtectedRoute';
-import FeedbackForm from './components/FeedbackForm';
 
 function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
         <Router>
-          <div className="flex flex-col min-h-screen bg-cream text-gray-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
+          <div className="flex flex-col h-screen bg-cream text-gray-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
             <Navbar />
-            <div className="flex flex-1">
+            <div className="flex flex-1 overflow-hidden">
               <SidePanel />
-              <main className="flex-grow bg-cream dark:bg-slate-950">
+              <main className="flex-grow bg-cream dark:bg-slate-950 overflow-y-auto">
                 <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -36,9 +36,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
-                    <div className="max-w-7xl mx-auto px-4 pb-20">
-                      <FeedbackForm />
-                    </div>
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/feedback" 
+                element={
+                  <ProtectedRoute>
+                    <Feedback />
                   </ProtectedRoute>
                 } 
               />

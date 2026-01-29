@@ -4,6 +4,8 @@ const Role = require('../models/Role');
 const Course = require('../models/Course');
 const Job = require('../models/Job');
 const Feedback = require('../models/Feedback');
+const LoginLog = require('../models/LoginLog');
+const User = require('../models/User');
 
 // --- Stream Controllers ---
 exports.getStreams = async (req, res) => {
@@ -171,6 +173,134 @@ exports.getAllFeedback = async (req, res) => {
     try {
         const feedbacks = await Feedback.find().populate('user', 'name email');
         res.status(200).json({ success: true, data: feedbacks });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get all login logs
+exports.getLoginLogs = async (req, res) => {
+    try {
+        const logs = await LoginLog.find()
+            .populate('user', 'name email role')
+            .sort({ loginTime: -1 })
+            .limit(100);
+        res.status(200).json({ success: true, data: logs });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get login logs statistics
+exports.getLoginLogsStats = async (req, res) => {
+    try {
+        const totalLogins = await LoginLog.countDocuments();
+        const successfulLogins = await LoginLog.countDocuments({ status: 'success' });
+        const failedLogins = await LoginLog.countDocuments({ status: 'failed' });
+        const uniqueUsers = await LoginLog.distinct('user');
+        
+        // Get logins in last 7 days
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const loginsLastWeek = await LoginLog.countDocuments({ 
+            loginTime: { $gte: sevenDaysAgo },
+            status: 'success'
+        });
+
+        res.status(200).json({ 
+            success: true, 
+            data: {
+                totalLogins,
+                successfulLogins,
+                failedLogins,
+                uniqueUsers: uniqueUsers.length,
+                loginsLastWeek
+            }
+        });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get all registered users
+exports.getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find()
+            .select('-password')
+            .populate('stream', 'name')
+            .sort({ createdAt: -1 });
+        
+        res.status(200).json({ 
+            success: true, 
+            data: users,
+            total: users.length
+        });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get user registration statistics
+exports.getUserStats = async (req, res) => {
+    try {
+        const totalUsers = await User.countDocuments();
+        const adminUsers = await User.countDocuments({ role: 'admin' });
+        const regularUsers = await User.countDocuments({ role: 'user' });
+        
+        // Users registered today
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const usersToday = await User.countDocuments({ createdAt: { $gte: today } });
+        
+        // Users registered this week
+        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const usersThisWeek = await User.countDocuments({ createdAt: { $gte: sevenDaysAgo } });
+        
+        res.status(200).json({ 
+            success: true, 
+            data: {
+                totalUsers,
+                adminUsers,
+                regularUsers,
+                usersToday,
+                usersThisWeek
+            }
+        });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Delete a login log
+exports.deleteLoginLog = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedLog = await LoginLog.findByIdAndDelete(id);
+        
+        if (!deletedLog) {
+            return res.status(404).json({ success: false, message: 'Login log not found' });
+        }
+        
+        res.status(200).json({ 
+            success: true, 
+            message: 'Login log deleted successfully',
+            data: deletedLog
+        });
+    } catch (err) {
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Delete all login logs for a specific user
+exports.deleteUserLoginLogs = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const result = await LoginLog.deleteMany({ user: userId });
+        
+        res.status(200).json({ 
+            success: true, 
+            message: `${result.deletedCount} login logs deleted`,
+            deletedCount: result.deletedCount
+        });
     } catch (err) {
         res.status(400).json({ success: false, message: err.message });
     }

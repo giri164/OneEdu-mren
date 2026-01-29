@@ -6,11 +6,8 @@ const Role = require('./models/Role');
 const Course = require('./models/Course');
 const Job = require('./models/Job');
 const User = require('./models/User');
-
 dotenv.config();
-
 mongoose.connect(process.env.MONGODB_URI);
-
 const seedData = async () => {
     try {
         await Stream.deleteMany();
@@ -19,9 +16,7 @@ const seedData = async () => {
         await Course.deleteMany();
         await Job.deleteMany();
         await User.deleteMany();
-
         console.log('Data Cleared...');
-
         // Admin with specific credentials: username=admin, email=admin@gmail.com, password=admin
         await User.create({
             name: 'admin',
@@ -29,42 +24,42 @@ const seedData = async () => {
             password: 'admin12345',
             role: 'admin'
         });
-
         // 1. CSE Stream
         const cse = await Stream.create({
             name: 'Computer Science & Engineering',
-            description: 'Focuses on software development, AI, Cyber Security, and IoT systems.'
+            description: 'Focuses on software development, AI, Cyber Security, and IoT systems.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/14/14532.png'
         });
-
         // 2. Mechanical Stream
         const mechanical = await Stream.create({
             name: 'Mechanical Engineering',
-            description: 'Design, manufacturing, and maintenance of mechanical systems and robotics.'
+            description: 'Design, manufacturing, and maintenance of mechanical systems and robotics.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/921/921276.png'
         });
-
         // 3. Civil Stream
         const civil = await Stream.create({
             name: 'Civil Engineering',
-            description: 'Infrastructure, construction management, and urban development.'
+            description: 'Infrastructure, construction management, and urban development.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/1524/1524863.png'
         });
-
         // 4. Electronics & Communication
         const ece = await Stream.create({
             name: 'Electronics & Communication Engineering',
-            description: 'Embedded systems, communication networks, and VLSI design.'
+            description: 'Embedded systems, communication networks, and VLSI design.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/2921/2921222.png'
         });
-
         // 5. Electrical & Electronics
         const eee = await Stream.create({
             name: 'Electrical & Electronics Engineering',
-            description: 'Power systems, smart grid, and renewable integration.'
+            description: 'Power systems, smart grid, and renewable integration.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/3589/3589592.png'
         });
-
         // --- CSE SUB-DOMAINS ---
         const cseAIML = await SubDomain.create({
             name: 'CSE - AI & Machine Learning',
             stream: cse._id,
             description: 'Neural Networks, Deep Learning, and Predictive AI systems.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/3143/3143615.png',
             recommendedCertifications: [
                 { name: 'TensorFlow Developer', issuer: 'Google', level: 'Intermediate', examUrl: 'https://www.tensorflow.org/certificate', fee: '$100' },
                 { name: 'AWS ML Specialty', issuer: 'AWS', level: 'Advanced', examUrl: 'https://aws.amazon.com/certification/certified-machine-learning-specialty/', fee: '$300' },
@@ -73,11 +68,11 @@ const seedData = async () => {
                 { name: 'Google Professional Data Engineer', issuer: 'Google', level: 'Advanced', examUrl: 'https://cloud.google.com/certification/data-engineer', fee: '$200' }
             ]
         });
-
         const cseDataScience = await SubDomain.create({
             name: 'CSE - Data Science',
             stream: cse._id,
             description: 'Big Data Analytics, Statistical Modeling, and Business Intelligence.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/4436/4436481.png',
             recommendedCertifications: [
                 { name: 'Databricks Data Engineer Associate', issuer: 'Databricks', level: 'Intermediate', examUrl: 'https://www.databricks.com/learn/certification', fee: '$200' },
                 { name: 'IBM Data Science Professional', issuer: 'IBM', level: 'Beginner', examUrl: 'https://www.coursera.org/professional-certificates/ibm-data-science', fee: '$39/mo' },
@@ -85,10 +80,10 @@ const seedData = async () => {
                 { name: 'Microsoft DP-900', issuer: 'Microsoft', level: 'Beginner', examUrl: 'https://learn.microsoft.com/en-us/credentials/certifications/azure-data-fundamentals/', fee: '$99' }
             ]
         });
-
         const cseCyber = await SubDomain.create({
             name: 'CSE - Cyber Security',
             stream: cse._id,
+            logo: 'https://cdn-icons-png.flaticon.com/512/1680/1680403.png',
             description: 'Network Defense, Ethical Hacking, and Blockchain Technology.',
             recommendedCertifications: [
                 { name: 'CEH v12', issuer: 'EC-Council', level: 'Intermediate', examUrl: 'https://www.eccouncil.org/programs/certified-ethical-hacker-ceh/', fee: '$1199' },
@@ -98,10 +93,10 @@ const seedData = async () => {
                 { name: 'AZ-500 Security Engineer', issuer: 'Microsoft', level: 'Intermediate', examUrl: 'https://learn.microsoft.com/en-us/credentials/certifications/azure-security-engineer/', fee: '$165' }
             ]
         });
-
         const cseIoT = await SubDomain.create({
             name: 'CSE - Internet of Things',
             stream: cse._id,
+            logo: 'https://cdn-icons-png.flaticon.com/512/3050/3050159.png',
             description: 'Smart Devices, Embedded Systems, and Connected Infrastructure.',
             recommendedCertifications: [
                 { name: 'Cisco DevNet Associate', issuer: 'Cisco', level: 'Intermediate', examUrl: 'https://www.cisco.com/c/en/us/training-events/training-certifications/certifications/devnet.html', fee: '$300' },
@@ -110,7 +105,6 @@ const seedData = async () => {
                 { name: 'Embedded Systems Professional', issuer: 'NXP', level: 'Intermediate', examUrl: 'https://www.nxp.com', fee: 'Varies' }
             ]
         });
-
         // --- ROLES & COURSES: CYBER SECURITY (Blockchain focus) ---
         const blockchainDev = await Role.create({
             title: 'Blockchain Developer',
@@ -118,7 +112,6 @@ const seedData = async () => {
             skills: ['Blockchain', 'Solidity', 'Web3'],
             description: 'Build decentralized user applications and secure smart contracts.'
         });
-
         await Course.create([
             {
                 title: 'Blockchain Fundamentals',
@@ -184,7 +177,6 @@ const seedData = async () => {
                 stream: cse._id
             }
         ]);
-
         // --- ROLES & COURSES: AI & ML ---
         const mlEngineer = await Role.create({
             title: 'Machine Learning Engineer',
@@ -192,7 +184,6 @@ const seedData = async () => {
             skills: ['Python', 'Machine Learning', 'TensorFlow'],
             description: 'Design and deploy AI models for production.'
         });
-
         await Course.create([
             {
                 title: 'Python for AI',
@@ -258,7 +249,6 @@ const seedData = async () => {
                 stream: cse._id
             }
         ]);
-
         // --- ROLES & COURSES: DATA SCIENCE ---
         const dataScientist = await Role.create({
             title: 'Data Scientist',
@@ -311,7 +301,6 @@ const seedData = async () => {
                 stream: cse._id
             }
         ]);
-
         // --- ROLES & COURSES: IOT ---
         const iotEngineer = await Role.create({
             title: 'IoT System Architect',
@@ -319,7 +308,6 @@ const seedData = async () => {
             skills: ['Embedded C', 'Arduino', 'MQTT'],
             description: 'Design end-to-end IoT ecosystems.'
         });
-
         await Course.create([
             {
                 title: 'Arduino for Beginners',
@@ -364,18 +352,19 @@ const seedData = async () => {
                 stream: cse._id
             }
         ]);
-
         // --- MECHANICAL SUB-DOMAINS ---
         const mechAutomotive = await SubDomain.create({
             name: 'MECH - Automotive Systems',
             stream: mechanical._id,
-            description: 'Vehicle dynamics, powertrain design, and CAD for automotive systems.'
+            description: 'Vehicle dynamics, powertrain design, and CAD for automotive systems.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/744/744447.png'
         });
 
         const mechRobotics = await SubDomain.create({
             name: 'MECH - Robotics & Automation',
             stream: mechanical._id,
-            description: 'Industrial robots, kinematics, and control systems.'
+            description: 'Industrial robots, kinematics, and control systems.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/924/924514.png'
         });
 
         const automotiveEngineer = await Role.create({
@@ -391,7 +380,6 @@ const seedData = async () => {
             skills: ['Kinematics', 'ROS', 'Control Systems'],
             description: 'Develop robotic cells, controls, and automation scripts.'
         });
-
         await Course.create([
             {
                 title: 'Automotive CAD with CATIA',
@@ -464,18 +452,19 @@ const seedData = async () => {
                 stream: mechanical._id
             }
         ]);
-
         // --- CIVIL SUB-DOMAINS ---
         const civilStructural = await SubDomain.create({
             name: 'CIVIL - Structural Engineering',
             stream: civil._id,
-            description: 'Analysis and design of load-bearing structures.'
+            description: 'Analysis and design of load-bearing structures.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/1524/1524854.png'
         });
 
         const civilTransport = await SubDomain.create({
             name: 'CIVIL - Transportation Systems',
             stream: civil._id,
-            description: 'Highway geometrics, transit planning, and traffic modeling.'
+            description: 'Highway geometrics, transit planning, and traffic modeling.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/2913/2913152.png'
         });
 
         const structuralEngineer = await Role.create({
@@ -491,7 +480,6 @@ const seedData = async () => {
             skills: ['VISSIM', 'GIS', 'Traffic Modeling'],
             description: 'Plan mobility networks and optimize traffic flows.'
         });
-
         await Course.create([
             {
                 title: 'ETABS for High-Rise',
@@ -564,18 +552,19 @@ const seedData = async () => {
                 stream: civil._id
             }
         ]);
-
         // --- ECE SUB-DOMAINS ---
         const eceEmbedded = await SubDomain.create({
             name: 'ECE - Embedded Systems',
             stream: ece._id,
-            description: 'Firmware, RTOS, and board bring-up.'
+            description: 'Microcontroller programming and PCB design.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/2913/2913097.png'
         });
 
         const eceWireless = await SubDomain.create({
             name: 'ECE - Communication Systems',
             stream: ece._id,
-            description: 'Wireless protocols, SDR, and signal processing.'
+            description: 'Wireless protocols, SDR, and signal processing.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/1587/1587566.png'
         });
 
         const embeddedFirmware = await Role.create({
@@ -591,7 +580,6 @@ const seedData = async () => {
             skills: ['SDR', '5G', 'Signal Processing'],
             description: 'Design and test wireless front-ends and protocols.'
         });
-
         await Course.create([
             {
                 title: 'FreeRTOS on STM32',
@@ -664,18 +652,19 @@ const seedData = async () => {
                 stream: ece._id
             }
         ]);
-
         // --- EEE SUB-DOMAINS ---
         const eeePower = await SubDomain.create({
             name: 'EEE - Power Systems',
             stream: eee._id,
-            description: 'Grid planning, protection, and SCADA.'
+            description: 'Transmission, distribution, and grid stability.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/2913/2913137.png'
         });
 
         const eeeRenewable = await SubDomain.create({
             name: 'EEE - Renewable & Smart Grid',
             stream: eee._id,
-            description: 'Solar, wind integration, and smart meters.'
+            description: 'Solar, wind integration, and smart meters.',
+            logo: 'https://cdn-icons-png.flaticon.com/512/3050/3050159.png'
         });
 
         const powerEngineer = await Role.create({
@@ -764,7 +753,6 @@ const seedData = async () => {
                 stream: eee._id
             }
         ]);
-
         // --- JOBS DATA ---
         await Job.create([
             {
@@ -948,7 +936,6 @@ const seedData = async () => {
                 description: 'Model hybrid solar-wind storage portfolios.'
             }
         ]);
-
         console.log(' Success: All Streams, Sub-domains, and Courses Seeded!');
         process.exit();
     } catch (err) {
@@ -956,5 +943,4 @@ const seedData = async () => {
         process.exit(1);
     }
 };
-
 seedData();

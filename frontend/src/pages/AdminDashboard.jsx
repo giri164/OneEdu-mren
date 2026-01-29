@@ -12,13 +12,23 @@ import {
   X,
   Save,
   Loader2,
-  Compass
+  Compass,
+  LogIn,
+  Users,
+  Activity,
+  TrendingUp,
+  AlertCircle,
+  Eye,
+  Calendar,
+  CheckCircle2
 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState('courses');
-  const [data, setData] = useState({ streams: [], courses: [], feedback: [], allRoles: [] });
+  const [data, setData] = useState({ streams: [], courses: [], feedback: [], allRoles: [], loginLogs: [], users: [] });
+  const [loginLogsStats, setLoginLogsStats] = useState(null);
+  const [userStats, setUserStats] = useState(null);
   const [subDomains, setSubDomains] = useState([]);
   const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,18 +63,26 @@ const AdminDashboard = () => {
   const fetchAdminData = async () => {
     setIsLoading(true);
     try {
-      const [streamsRes, coursesRes, feedbackRes, rolesRes] = await Promise.all([
+      const [streamsRes, coursesRes, feedbackRes, rolesRes, loginLogsRes, loginStatsRes, usersRes, userStatsRes] = await Promise.all([
         API.get('/user/streams'),
         API.get('/admin/courses'),
         API.get('/admin/feedback'),
-        API.get('/admin/roles')
+        API.get('/admin/roles'),
+        API.get('/admin/login-logs'),
+        API.get('/admin/login-logs-stats'),
+        API.get('/admin/users'),
+        API.get('/admin/user-stats')
       ]);
       setData({
         streams: streamsRes.data.data,
         courses: coursesRes.data.data,
         feedback: feedbackRes.data.data,
-        allRoles: rolesRes.data.data
+        allRoles: rolesRes.data.data,
+        loginLogs: loginLogsRes.data.data,
+        users: usersRes.data.data
       });
+      setLoginLogsStats(loginStatsRes.data.data);
+      setUserStats(userStatsRes.data.data);
       setSubDomains([]);
       setRoles([]);
     } catch (err) {
@@ -237,7 +255,7 @@ const AdminDashboard = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 pt-24 pb-32">
       <h1 className="text-3xl font-extrabold mb-8 text-gray-900">Admin Dashboard</h1>
 
       <div className="flex flex-col md:flex-row gap-8">
@@ -245,14 +263,18 @@ const AdminDashboard = () => {
           <SidebarButton label="Manage Courses" icon={<BookOpen size={20} />} active={activeTab === 'courses'} onClick={() => setActiveTab('courses')} />
           <SidebarButton label="Streams" icon={<LayoutGrid size={20} />} active={activeTab === 'streams'} onClick={() => setActiveTab('streams')} />
           <SidebarButton label="Roles" icon={<Compass size={20} />} active={activeTab === 'roles'} onClick={() => setActiveTab('roles')} />
+          <SidebarButton label="Registered Users" icon={<Users size={20} />} active={activeTab === 'users'} onClick={() => setActiveTab('users')} />
           <SidebarButton label="User Feedback" icon={<MessageSquare size={20} />} active={activeTab === 'feedback'} onClick={() => setActiveTab('feedback')} />
+          <SidebarButton label="Login Logs" icon={<LogIn size={20} />} active={activeTab === 'loginLogs'} onClick={() => setActiveTab('loginLogs')} />
         </div>
 
         <div className="flex-1">
           {activeTab === 'courses' && <CoursesPanel data={data} onAdd={openAddCourseModal} onEdit={openEditCourseModal} onDelete={handleDeleteCourse} />}
           {activeTab === 'streams' && <StreamsPanel data={data.streams} onDelete={handleDeleteStream} refresh={fetchAdminData} />}
           {activeTab === 'roles' && <RolesPanel data={data.allRoles} streams={data.streams} onDelete={handleDeleteRole} refresh={fetchAdminData} />}
+          {activeTab === 'users' && <UsersPanel users={data.users} stats={userStats} />}
           {activeTab === 'feedback' && <FeedbackPanel feedback={data.feedback} />}
+          {activeTab === 'loginLogs' && <LoginLogsPanel logs={data.loginLogs} stats={loginLogsStats} />}
         </div>
       </div>
 
@@ -459,6 +481,249 @@ const FeedbackPanel = ({ feedback }) => (
     {feedback.length === 0 && (
       <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed">No feedback received yet.</div>
     )}
+  </div>
+);
+
+const LoginLogsPanel = ({ logs, stats }) => {
+  const [deleteLoading, setDeleteLoading] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleDeleteLog = async (logId) => {
+    if (!window.confirm('Are you sure you want to delete this login record?')) return;
+    
+    setDeleteLoading(logId);
+    try {
+      await API.delete(`/admin/login-logs/${logId}`);
+      alert('Login log deleted successfully');
+      // Force refresh by updating key
+      setRefreshKey(prev => prev + 1);
+    } catch (err) {
+      alert('Failed to delete login log: ' + (err.response?.data?.message || err.message));
+    } finally {
+      setDeleteLoading(null);
+    }
+  };
+
+  return (
+  <div className="space-y-6">
+    {/* Statistics */}
+    {stats && (
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <Activity size={80} className="text-blue-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-blue-600 font-bold mb-1 flex items-center gap-1">
+              <Eye size={16} /> Total Logins
+            </div>
+            <div className="text-3xl font-bold text-blue-900">{stats.totalLogins}</div>
+          </div>
+        </div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <CheckCircle2 size={80} className="text-green-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-green-600 font-bold mb-1 flex items-center gap-1">
+              <CheckCircle2 size={16} /> Successful
+            </div>
+            <div className="text-3xl font-bold text-green-900">{stats.successfulLogins}</div>
+          </div>
+        </div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-4 border border-red-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <AlertCircle size={80} className="text-red-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-red-600 font-bold mb-1 flex items-center gap-1">
+              <AlertCircle size={16} /> Failed
+            </div>
+            <div className="text-3xl font-bold text-red-900">{stats.failedLogins}</div>
+          </div>
+        </div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 border border-purple-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <Users size={80} className="text-purple-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-purple-600 font-bold mb-1 flex items-center gap-1">
+              <Users size={16} /> Unique Users
+            </div>
+            <div className="text-3xl font-bold text-purple-900">{stats.uniqueUsers}</div>
+          </div>
+        </div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4 border border-orange-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <Calendar size={80} className="text-orange-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-orange-600 font-bold mb-1 flex items-center gap-1">
+              <Calendar size={16} /> This Week
+            </div>
+            <div className="text-3xl font-bold text-orange-900">{stats.loginsLastWeek}</div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Login Logs Table */}
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-gray-50 border-b">
+            <tr>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">User Name</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">IP Address</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Login Time</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Action</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y">
+            {logs?.map((log) => (
+              <tr key={log._id} className="hover:bg-gray-50">
+                <td className="px-6 py-4 text-sm text-gray-900 font-medium">{log.userName}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{log.email}</td>
+                <td className="px-6 py-4 text-sm">
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    log.status === 'success' 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-red-100 text-red-700'
+                  }`}>
+                    {log.status === 'success' ? '✓ Success' : '✗ Failed'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-600">{log.ipAddress || 'N/A'}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{new Date(log.loginTime).toLocaleString()}</td>
+                <td className="px-6 py-4 text-sm">
+                  <button
+                    onClick={() => handleDeleteLog(log._id)}
+                    disabled={deleteLoading === log._id}
+                    className="text-red-600 hover:text-red-900 font-semibold transition disabled:opacity-50"
+                  >
+                    {deleteLoading === log._id ? (
+                      <Loader2 size={16} className="inline animate-spin" />
+                    ) : (
+                      <Trash2 size={16} className="inline" />
+                    )}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {logs?.length === 0 && (
+        <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed m-4">No login logs available yet.</div>
+      )}
+    </div>
+  </div>
+  );
+};
+
+const UsersPanel = ({ users, stats }) => (
+  <div className="space-y-6">
+    {/* User Statistics */}
+    {stats && (
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <Users size={80} className="text-blue-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-blue-600 font-bold mb-1 flex items-center gap-1">
+              <Users size={16} /> Total Users
+            </div>
+            <div className="text-3xl font-bold text-blue-900">{stats.totalUsers}</div>
+          </div>
+        </div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <CheckCircle2 size={80} className="text-green-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-green-600 font-bold mb-1 flex items-center gap-1">
+              <Eye size={16} /> Regular Users
+            </div>
+            <div className="text-3xl font-bold text-green-900">{stats.regularUsers}</div>
+          </div>
+        </div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 border border-purple-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <TrendingUp size={80} className="text-purple-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-purple-600 font-bold mb-1 flex items-center gap-1">
+              <Activity size={16} /> Admin Users
+            </div>
+            <div className="text-3xl font-bold text-purple-900">{stats.adminUsers}</div>
+          </div>
+        </div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4 border border-orange-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <Calendar size={80} className="text-orange-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-orange-600 font-bold mb-1 flex items-center gap-1">
+              <Calendar size={16} /> Today
+            </div>
+            <div className="text-3xl font-bold text-orange-900">{stats.usersToday}</div>
+          </div>
+        </div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-4 border border-red-200 hover:shadow-lg transition group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+            <TrendingUp size={80} className="text-red-600" />
+          </div>
+          <div className="relative z-10">
+            <div className="text-sm text-red-600 font-bold mb-1 flex items-center gap-1">
+              <Calendar size={16} /> This Week
+            </div>
+            <div className="text-3xl font-bold text-red-900">{stats.usersThisWeek}</div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* Users Table */}
+    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead className="bg-gray-50 border-b">
+            <tr>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Name</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Role</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Stream</th>
+              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Registered On</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y">
+            {users?.map((user) => (
+              <tr key={user._id} className="hover:bg-gray-50">
+                <td className="px-6 py-4 text-sm text-gray-900 font-medium">{user.name}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
+                <td className="px-6 py-4 text-sm">
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    user.role === 'admin' 
+                      ? 'bg-purple-100 text-purple-700' 
+                      : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    {user.role === 'admin' ? '👨‍💼 Admin' : '👤 User'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-600">{user.stream?.name || 'Not Selected'}</td>
+                <td className="px-6 py-4 text-sm text-gray-600">{new Date(user.createdAt).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {users?.length === 0 && (
+        <div className="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed m-4">No registered users yet.</div>
+      )}
+    </div>
   </div>
 );
 

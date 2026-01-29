@@ -4,7 +4,7 @@ const {
     createSubStream, updateSubStream, deleteSubStream,
     getAllRoles, createRole, updateRole, deleteRole,
     getAllCourses, addCourse, updateCourse, deleteCourse,
-    addJob, getAllFeedback
+    addJob, getAllFeedback, getLoginLogs, getLoginLogsStats, getAllUsers, getUserStats, deleteLoginLog, deleteUserLoginLogs
 } = require('../controllers/adminController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
@@ -35,5 +35,13 @@ router.delete('/courses/:id', deleteCourse);
 router.post('/jobs', addJob);
 
 router.get('/feedback', getAllFeedback);
+
+router.get('/login-logs', getLoginLogs);
+router.get('/login-logs-stats', getLoginLogsStats);
+router.delete('/login-logs/:id', deleteLoginLog);
+router.delete('/login-logs-user/:userId', deleteUserLoginLogs);
+
+router.get('/users', getAllUsers);
+router.get('/user-stats', getUserStats);
 
 module.exports = router;

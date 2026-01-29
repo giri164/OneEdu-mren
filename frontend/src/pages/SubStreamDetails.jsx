@@ -70,7 +70,7 @@ const SubStreamDetails = () => {
   const { stream, subStream, courses } = context || {};
 
   return (
-    <div className="min-h-screen bg-[#f7f1e8] dark:bg-slate-950 transition-colors">
+    <div className="min-h-screen bg-[#f7f1e8] dark:bg-slate-950 transition-colors pt-24 pb-32">
       <div className="max-w-5xl mx-auto px-4 py-10 space-y-10">
         <Link
           to="/dashboard"

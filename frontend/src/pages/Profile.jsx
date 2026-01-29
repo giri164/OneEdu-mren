@@ -94,8 +94,19 @@ const Profile = () => {
   if (!user) return <div className="p-10 text-center">Loading profile...</div>;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 flex flex-col md:flex-row min-h-[600px]">
+    <div className="max-w-6xl mx-auto px-4 py-10 pt-24 pb-32">
+      {/* Header with Background Image */}
+      <div className="relative h-64 rounded-3xl overflow-hidden mb-8 shadow-2xl">
+        <img 
+          src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=400&fit=crop&q=80"
+          alt="Profile header"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/40 to-secondary/40"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-slate-900 to-transparent"></div>
+      </div>
+
+      <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-slate-800 flex flex-col md:flex-row min-h-[600px] -mt-20 relative z-10">
         
         {/* Sidebar */}
         <div className="w-full md:w-80 bg-gray-50/50 border-r border-gray-100 p-8">
