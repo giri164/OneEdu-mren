@@ -206,5 +206,5 @@ Built as a university project expo submission with modern web technologies and A
 - `/backend`: API server, models, controllers, and routes.
 - `/frontend`: React client with Tailwind CSS and context-based state management.
 
-# One-EDU-my
+# One-EDU-smart carrer  
 
