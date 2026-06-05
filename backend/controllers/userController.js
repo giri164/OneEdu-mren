@@ -3,8 +3,11 @@ const SubDomain = require('../models/SubDomain');
 const Role = require('../models/Role');
 const Course = require('../models/Course');
 const Job = require('../models/Job');
+const JobApplication = require('../models/JobApplication');
 const User = require('../models/User');
 const Feedback = require('../models/Feedback');
+const jobMatchingService = require('../services/jobMatchingService');
+const mongoose = require('mongoose');
 
 // Get all streams
 exports.getStreams = async (req, res) => {
@@ -268,5 +271,340 @@ exports.getCoursesBySubStream = async (req, res) => {
     } catch (err) {
         console.error('Error in getCoursesBySubStream:', err);
         return res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Search across courses, jobs, roles, and streams
+exports.search = async (req, res) => {
+    try {
+        const { q: query } = req.query;
+
+        if (!query || query.trim().length < 2) {
+            return res.status(200).json({
+                success: true,
+                data: {
+                    courses: [],
+                    jobs: [],
+                    roles: [],
+                    streams: []
+                }
+            });
+        }
+
+        const searchRegex = new RegExp(query, 'i');
+
+        // Search courses
+        const courses = await Course.find({
+            $or: [
+                { title: searchRegex },
+                { provider: searchRegex },
+                { description: searchRegex }
+            ]
+        }).populate('role').limit(20);
+
+        // Search jobs
+        const jobs = await Job.find({
+            $or: [
+                { title: searchRegex },
+                { company: searchRegex },
+                { location: searchRegex },
+                { description: searchRegex }
+            ]
+        }).populate('role').limit(20);
+
+        // Search roles
+        const roles = await Role.find({
+            $or: [
+                { title: searchRegex },
+                { skills: { $in: [searchRegex] } }
+            ]
+        }).populate('subDomain').limit(20);
+
+        // Search streams
+        const streams = await Stream.find({
+            name: searchRegex
+        }).limit(10);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                courses,
+                jobs,
+                roles,
+                streams
+            }
+        });
+    } catch (err) {
+        console.error('Error in search:', err);
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Apply for a job
+exports.applyForJob = async (req, res) => {
+    try {
+        const { jobId, notes, resume, coverLetter } = req.body;
+
+        // Check if job exists
+        const job = await Job.findById(jobId);
+        if (!job) {
+            return res.status(404).json({ success: false, message: 'Job not found' });
+        }
+
+        // Check if user already applied
+        const existingApplication = await JobApplication.findOne({
+            user: req.user.id,
+            job: jobId
+        });
+
+        if (existingApplication) {
+            return res.status(400).json({ success: false, message: 'You have already applied for this job' });
+        }
+
+        // Create application
+        const application = await JobApplication.create({
+            user: req.user.id,
+            job: jobId,
+            notes,
+            resume,
+            coverLetter
+        });
+
+        res.status(201).json({
+            success: true,
+            data: application
+        });
+    } catch (err) {
+        console.error('Error in applyForJob:', err);
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get user's job applications
+exports.getMyApplications = async (req, res) => {
+    try {
+        const applications = await JobApplication.find({ user: req.user.id })
+            .populate('job')
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            data: applications
+        });
+    } catch (err) {
+        console.error('Error in getMyApplications:', err);
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Update application status (for user to withdraw)
+exports.updateApplication = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status, notes } = req.body;
+
+        const application = await JobApplication.findOne({
+            _id: id,
+            user: req.user.id
+        });
+
+        if (!application) {
+            return res.status(404).json({ success: false, message: 'Application not found' });
+        }
+
+        // Users can only withdraw their applications
+        if (status && status !== 'withdrawn') {
+            return res.status(400).json({ success: false, message: 'You can only withdraw applications' });
+        }
+
+        application.status = status || application.status;
+        if (notes) application.notes = notes;
+
+        await application.save();
+
+        res.status(200).json({
+            success: true,
+            data: application
+        });
+    } catch (err) {
+        console.error('Error in updateApplication:', err);
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get user's resume
+exports.getResume = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('resume');
+        res.status(200).json({
+            success: true,
+            data: user.resume || null
+        });
+    } catch (err) {
+        console.error('Error in getResume:', err);
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Save/update user's resume
+exports.saveResume = async (req, res) => {
+    try {
+        const resume = req.body;
+        const user = await User.findByIdAndUpdate(
+            req.user.id,
+            { resume },
+            { new: true }
+        );
+        res.status(200).json({
+            success: true,
+            data: user.resume
+        });
+    } catch (err) {
+        console.error('Error in saveResume:', err);
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get job match score for a specific job
+exports.getJobMatchScore = async (req, res) => {
+    try {
+        const { jobId } = req.params;
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const job = await Job.findById(jobId);
+        if (!job) {
+            return res.status(404).json({ success: false, message: 'Job not found' });
+        }
+
+        const userSkills = user.skillProgress?.map(s => s.skill) || [];
+        const matchResult = jobMatchingService.calculateMatchScore(userSkills, job.requirements || []);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                jobId: job._id,
+                jobTitle: job.title,
+                ...matchResult
+            }
+        });
+    } catch (err) {
+        console.error('Error in getJobMatchScore:', err);
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get personalized job recommendations
+exports.getJobRecommendations = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        // Get all available jobs
+        const jobs = await Job.find({ isActive: true });
+
+        const userSkills = user.skillProgress?.map(s => s.skill) || [];
+        const recommendations = jobMatchingService.getJobRecommendations(userSkills, jobs);
+
+        res.status(200).json({
+            success: true,
+            data: recommendations.slice(0, 10) // Return top 10 recommendations
+        });
+    } catch (err) {
+        console.error('Error in getJobRecommendations:', err);
+        res.status(400).json({ success: false, message: err.message });
+    }
+};
+
+// Get career analytics for the user
+exports.getCareerAnalytics = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        // Get job applications with status
+        const applications = await JobApplication.find({ user: userId })
+            .populate('job', 'title company')
+            .sort({ createdAt: -1 });
+
+        // Calculate application stats
+        const totalApplications = applications.length;
+        const pendingApplications = applications.filter(app => app.status === 'pending').length;
+        const acceptedApplications = applications.filter(app => app.status === 'accepted').length;
+        const rejectedApplications = applications.filter(app => app.status === 'rejected').length;
+        const interviewRate = totalApplications > 0 ? Math.round((acceptedApplications / totalApplications) * 100) : 0;
+
+        // Get course progress
+        const courseProgress = await User.findById(userId).select('courseProgress');
+        const totalCourses = courseProgress?.courseProgress?.length || 0;
+        const completedCourses = courseProgress?.courseProgress?.filter(c => c.isCompleted)?.length || 0;
+        const courseCompletionRate = totalCourses > 0 ? Math.round((completedCourses / totalCourses) * 100) : 0;
+
+        // Get skill progress over time (mock data for now - in production, track skill updates)
+        const skillProgress = courseProgress?.courseProgress?.filter(c => c.isCompleted) || [];
+        const skillsLearned = skillProgress.length;
+
+        // Monthly application data (last 6 months)
+        const sixMonthsAgo = new Date();
+        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
+        const monthlyApplications = await JobApplication.aggregate([
+            { $match: { user: mongoose.Types.ObjectId(userId), createdAt: { $gte: sixMonthsAgo } } },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: '$createdAt' },
+                        month: { $month: '$createdAt' }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { '_id.year': 1, '_id.month': 1 } }
+        ]);
+
+        // Format monthly data
+        const monthlyData = monthlyApplications.map(item => ({
+            month: `${item._id.year}-${item._id.month.toString().padStart(2, '0')}`,
+            applications: item.count
+        }));
+
+        // Skill development over time (simplified)
+        const skillDevelopmentData = [
+            { month: 'Jan', skills: 2 },
+            { month: 'Feb', skills: 3 },
+            { month: 'Mar', skills: 5 },
+            { month: 'Apr', skills: 7 },
+            { month: 'May', skills: 8 },
+            { month: 'Jun', skills: skillsLearned }
+        ];
+
+        res.status(200).json({
+            success: true,
+            data: {
+                overview: {
+                    totalApplications,
+                    pendingApplications,
+                    acceptedApplications,
+                    rejectedApplications,
+                    interviewRate,
+                    totalCourses,
+                    completedCourses,
+                    courseCompletionRate,
+                    skillsLearned
+                },
+                charts: {
+                    monthlyApplications: monthlyData,
+                    skillDevelopment: skillDevelopmentData
+                }
+            }
+        });
+    } catch (err) {
+        console.error('Error in getCareerAnalytics:', err);
+        res.status(400).json({ success: false, message: err.message });
     }
 };

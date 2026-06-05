@@ -13,6 +13,9 @@ import SubStreamDetails from './pages/SubStreamDetails';
 import RoleDetails from './pages/RoleDetails';
 import AdminDashboard from './pages/AdminDashboard';
 import Feedback from './pages/Feedback';
+import SearchPage from './pages/SearchPage';
+import JobApplications from './pages/JobApplications';
+import ResumeBuilder from './pages/ResumeBuilder';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -25,7 +28,8 @@ function App() {
             <div className="flex flex-1 overflow-hidden">
               <SidePanel />
               <main className="flex-grow bg-cream dark:bg-slate-950 overflow-y-auto">
-                <Routes>
+                <div className="min-h-full flex flex-col">
+                  <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
@@ -44,6 +48,30 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Feedback />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/search" 
+                element={
+                  <ProtectedRoute>
+                    <SearchPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/applications" 
+                element={
+                  <ProtectedRoute>
+                    <JobApplications />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/resume" 
+                element={
+                  <ProtectedRoute>
+                    <ResumeBuilder />
                   </ProtectedRoute>
                 } 
               />
@@ -82,9 +110,10 @@ function App() {
                 } 
               />
               </Routes>
+                  <Footer />
+                </div>
               </main>
             </div>
-            <Footer />
           </div>
         </Router>
       </AuthProvider>

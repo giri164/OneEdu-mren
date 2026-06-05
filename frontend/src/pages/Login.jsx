@@ -45,7 +45,7 @@ const Login = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 opacity-20">
         <img 
-          src="https://images.unsplash.com/photo-1553531088-fde7e220b50b?w=1200&h=800&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1516321318423-f06f70504c11?w=1200&h=800&fit=crop"
           alt="background"
           className="w-full h-full object-cover"
         />

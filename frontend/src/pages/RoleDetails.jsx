@@ -71,7 +71,7 @@ const RoleDetails = () => {
           {/* Header with Background Image */}
           <div className="relative rounded-3xl overflow-hidden shadow-xl h-80">
             <img 
-              src="https://images.unsplash.com/photo-1522202176988-696ce0213d3a?w=1200&h=400&fit=crop&q=80"
+              src="https://images.unsplash.com/photo-1516321318423-f06f70504c11?w=1200&h=400&fit=crop"
               alt="Role header"
               className="w-full h-full object-cover"
             />

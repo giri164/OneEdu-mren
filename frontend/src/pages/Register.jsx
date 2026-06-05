@@ -42,7 +42,13 @@ const Register = () => {
       });
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed.');
+      // Show backend error message when available (including validation errors)
+      const backendMessage =
+        err.response?.data?.message ||
+        (err.response?.data ? JSON.stringify(err.response.data) : null) ||
+        err.message;
+      console.error('Registration error:', err.response || err);
+      setError(backendMessage || 'Registration failed.');
     } finally {
       setLoading(false);
     }
@@ -53,7 +59,7 @@ const Register = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 opacity-20">
         <img 
-          src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=800&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=800&fit=crop"
           alt="background"
           className="w-full h-full object-cover"
         />

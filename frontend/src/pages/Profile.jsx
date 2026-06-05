@@ -98,7 +98,7 @@ const Profile = () => {
       {/* Header with Background Image */}
       <div className="relative h-64 rounded-3xl overflow-hidden mb-8 shadow-2xl">
         <img 
-          src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=400&fit=crop&q=80"
+          src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=1200&h=400&fit=crop"
           alt="Profile header"
           className="w-full h-full object-cover"
         />

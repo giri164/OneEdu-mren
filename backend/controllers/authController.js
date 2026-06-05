@@ -1,17 +1,22 @@
 const User = require('../models/User');
 const LoginLog = require('../models/LoginLog');
 const jwt = require('jsonwebtoken');
+const userService = require('../services/userService');
+const { userRegisterSchema, userLoginSchema } = require('../validations/schemas');
 
 // Register user
 exports.register = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const user = await userService.createUser(req.body);
 
-        const user = await User.create({
-            name,
-            email,
-            password,
-            role: role || 'user'
+        // Log successful registration
+        await LoginLog.create({
+            user: user._id,
+            email: user.email,
+            userName: user.name,
+            status: 'registration',
+            ipAddress: req.ip || req.connection.remoteAddress,
+            userAgent: req.get('user-agent')
         });
 
         sendTokenResponse(user, 201, res);
@@ -26,43 +31,7 @@ exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Validate email & password
-        if (!email || !password) {
-            return res.status(400).json({ success: false, message: 'Please provide an email and password' });
-        }
-
-        // Check for user
-        const user = await User.findOne({ email }).select('+password');
-
-        if (!user) {
-            // Log failed login attempt
-            await LoginLog.create({
-                email,
-                userName: 'Unknown',
-                status: 'failed',
-                failureReason: 'User not found',
-                ipAddress: req.ip || req.connection.remoteAddress,
-                userAgent: req.get('user-agent')
-            });
-            return res.status(401).json({ success: false, message: 'Invalid credentials' });
-        }
-
-        // Check if password matches
-        const isMatch = await user.matchPassword(password);
-
-        if (!isMatch) {
-            // Log failed login attempt
-            await LoginLog.create({
-                user: user._id,
-                email: user.email,
-                userName: user.name,
-                status: 'failed',
-                failureReason: 'Invalid password',
-                ipAddress: req.ip || req.connection.remoteAddress,
-                userAgent: req.get('user-agent')
-            });
-            return res.status(401).json({ success: false, message: 'Invalid credentials' });
-        }
+        const user = await userService.authenticateUser(email, password);
 
         // Log successful login
         await LoginLog.create({
@@ -77,7 +46,18 @@ exports.login = async (req, res) => {
         sendTokenResponse(user, 200, res);
     } catch (err) {
         console.error('Login Error:', err);
-        res.status(400).json({ success: false, message: err.message });
+
+        // Log failed login attempt
+        await LoginLog.create({
+            email: req.body.email || 'Unknown',
+            userName: 'Unknown',
+            status: 'failed',
+            failureReason: err.message,
+            ipAddress: req.ip || req.connection.remoteAddress,
+            userAgent: req.get('user-agent')
+        });
+
+        res.status(401).json({ success: false, message: err.message });
     }
 };
 
