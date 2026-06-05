@@ -317,7 +317,7 @@ const SidebarButton = ({ label, icon, active, onClick }) => (
 );
 
 const CoursesPanel = ({ data, onAdd, onEdit, onDelete }) => (
-  <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+  <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden">
     <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
       <h3 className="text-xl font-bold">Course Management</h3>
       <button onClick={onAdd} className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-green-700 transition">
@@ -327,22 +327,22 @@ const CoursesPanel = ({ data, onAdd, onEdit, onDelete }) => (
     <div className="overflow-x-auto">
       <table className="w-full text-left">
         <thead>
-          <tr className="bg-gray-50 text-gray-500 text-sm uppercase">
-            <th className="px-6 py-4 font-bold">Title</th>
-            <th className="px-6 py-4 font-bold">Skill</th>
-            <th className="px-6 py-4 font-bold">Type</th>
-            <th className="px-6 py-4 font-bold">Provider</th>
-            <th className="px-6 py-4 font-bold">Duration</th>
-            <th className="px-6 py-4 font-bold text-center">Actions</th>
+          <tr className="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-500 text-sm uppercase">
+            <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Title</th>
+            <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Skill</th>
+            <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Type</th>
+            <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Provider</th>
+            <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Duration</th>
+            <th className="px-6 py-4 font-bold text-center transform hover:scale-105 transition-transform duration-200">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
           {data.courses.map((course) => (
-            <tr key={course._id} className="hover:bg-gray-50/50 transition">
+            <tr key={course._id} className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-300 transform hover:scale-[1.02]">
               <td className="px-6 py-4 font-bold text-gray-900 max-w-xs truncate">{course.title}</td>
               <td className="px-6 py-4 text-sm text-gray-600">{course.skill}</td>
               <td className="px-6 py-4">
-                <span className={`px-2 py-1 rounded-full text-xs font-bold ${course.type === 'Paid' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
+                <span className={`px-2 py-1 rounded-full text-xs font-bold transform hover:scale-110 transition-transform duration-200 ${course.type === 'Paid' ? 'bg-amber-100 text-amber-700 hover:bg-amber-200' : 'bg-green-100 text-green-700 hover:bg-green-200'}`}>
                   {course.type}
                 </span>
               </td>
@@ -350,10 +350,10 @@ const CoursesPanel = ({ data, onAdd, onEdit, onDelete }) => (
               <td className="px-6 py-4 text-sm text-gray-600">{course.duration}</td>
               <td className="px-6 py-4">
                 <div className="flex justify-center gap-3">
-                  <button onClick={() => onEdit(course)} className="text-blue-600 hover:bg-blue-50 p-2 rounded-full transition">
+                  <button onClick={() => onEdit(course)} className="text-blue-600 hover:bg-blue-50 p-2 rounded-full transition transform hover:scale-110 hover:rotate-3d duration-200">
                     <Edit size={18} />
                   </button>
-                  <button onClick={() => onDelete(course._id)} className="text-red-600 hover:bg-red-50 p-2 rounded-full transition">
+                  <button onClick={() => onDelete(course._id)} className="text-red-600 hover:bg-red-50 p-2 rounded-full transition transform hover:scale-110 hover:rotate-3d duration-200">
                     <Trash2 size={18} />
                   </button>
                 </div>
@@ -370,26 +370,26 @@ const CoursesPanel = ({ data, onAdd, onEdit, onDelete }) => (
 );
 
 const StreamsPanel = ({ data, onDelete, refresh }) => (
-  <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+  <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden">
     <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
       <h3 className="text-xl font-bold">Manage Streams</h3>
     </div>
     <table className="w-full text-left">
       <thead>
-        <tr className="bg-gray-50 text-gray-500 text-sm uppercase">
-          <th className="px-6 py-4 font-bold">Stream Name</th>
-          <th className="px-6 py-4 font-bold">Description</th>
-          <th className="px-6 py-4 font-bold text-center">Actions</th>
+        <tr className="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-500 text-sm uppercase">
+          <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Stream Name</th>
+          <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Description</th>
+          <th className="px-6 py-4 font-bold text-center transform hover:scale-105 transition-transform duration-200">Actions</th>
         </tr>
       </thead>
       <tbody className="divide-y divide-gray-100">
         {data.map((stream) => (
-          <tr key={stream._id} className="hover:bg-gray-50/50 transition">
+          <tr key={stream._id} className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-300 transform hover:scale-[1.02]">
             <td className="px-6 py-4 font-bold text-gray-900">{stream.name}</td>
             <td className="px-6 py-4 text-sm text-gray-600 max-w-xs truncate">{stream.description}</td>
             <td className="px-6 py-4">
               <div className="flex justify-center gap-3">
-                <button onClick={() => onDelete(stream._id)} className="text-red-600 hover:bg-red-50 p-2 rounded-full transition">
+                <button onClick={() => onDelete(stream._id)} className="text-red-600 hover:bg-red-50 p-2 rounded-full transition transform hover:scale-110 hover:rotate-3d duration-200">
                   <Trash2 size={18} />
                 </button>
               </div>
@@ -412,7 +412,7 @@ const StreamsPanel = ({ data, onDelete, refresh }) => (
 );
 
 const RolesPanel = ({ data, streams, onDelete, refresh }) => (
-  <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+  <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden">
     <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
       <h3 className="text-xl font-bold">Manage Roles</h3>
     </div>
@@ -423,26 +423,26 @@ const RolesPanel = ({ data, streams, onDelete, refresh }) => (
     <div className="overflow-x-auto">
       <table className="w-full text-left">
         <thead>
-          <tr className="bg-gray-50 text-gray-500 text-sm uppercase">
-            <th className="px-6 py-4 font-bold">Role Title</th>
-            <th className="px-6 py-4 font-bold">SubDomain / Stream</th>
-            <th className="px-6 py-4 font-bold">Skills</th>
-            <th className="px-6 py-4 font-bold text-center">Actions</th>
+          <tr className="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-500 text-sm uppercase">
+            <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Role Title</th>
+            <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">SubDomain / Stream</th>
+            <th className="px-6 py-4 font-bold transform hover:scale-105 transition-transform duration-200">Skills</th>
+            <th className="px-6 py-4 font-bold text-center transform hover:scale-105 transition-transform duration-200">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
           {data.map((r) => (
-            <tr key={r._id} className="hover:bg-gray-50/50 transition">
+            <tr key={r._id} className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-300 transform hover:scale-[1.02]">
               <td className="px-6 py-4 font-bold text-gray-900">{r.title}</td>
               <td className="px-6 py-4 text-sm text-gray-600">{r.subDomain?.name} <span className="text-gray-400">({r.subDomain?.stream?.name})</span></td>
               <td className="px-6 py-4">
                 <div className="flex flex-wrap gap-1">
-                  {r.skills?.map(s => <span key={s} className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[10px] font-bold">{s}</span>)}
+                  {r.skills?.map(s => <span key={s} className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-[10px] font-bold transform hover:scale-110 transition-transform duration-200 hover:bg-blue-100">{s}</span>)}
                 </div>
               </td>
               <td className="px-6 py-4">
                 <div className="flex justify-center gap-3">
-                  <button onClick={() => onDelete(r._id)} className="text-red-600 hover:bg-red-50 p-2 rounded-full transition">
+                  <button onClick={() => onDelete(r._id)} className="text-red-600 hover:bg-red-50 p-2 rounded-full transition transform hover:scale-110 hover:rotate-3d duration-200">
                     <Trash2 size={18} />
                   </button>
                 </div>
@@ -458,7 +458,7 @@ const RolesPanel = ({ data, streams, onDelete, refresh }) => (
 const FeedbackPanel = ({ feedback }) => (
   <div className="grid grid-cols-1 gap-6">
     {feedback.map((f) => (
-      <div key={f._id} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+      <div key={f._id} className="bg-white rounded-2xl p-6 border border-gray-100">
         <div className="flex justify-between items-start mb-4">
           <div className="flex items-center gap-3">
             <div className="bg-gray-200 w-10 h-10 rounded-full flex items-center justify-center font-bold">
@@ -508,89 +508,104 @@ const LoginLogsPanel = ({ logs, stats }) => {
   <div className="space-y-6">
     {/* Statistics */}
     {stats && (
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 transition-all duration-300 group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300">
             <Activity size={80} className="text-blue-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-blue-200/30 rounded-full blur-xl"></div>
           <div className="relative z-10">
-            <div className="text-sm text-blue-600 font-bold mb-1 flex items-center gap-1">
-              <Eye size={16} /> Total Logins
+            <div className="text-sm text-blue-600 font-bold mb-2 flex items-center gap-2">
+              <Eye size={16} />
+              Total Logins
             </div>
-            <div className="text-3xl font-bold text-blue-900">{stats.totalLogins}</div>
+            <div className="text-4xl font-black text-blue-900 mb-2">{stats.totalLogins}</div>
+            <div className="w-16 h-1 bg-blue-400 rounded-full"></div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+        <div className="relative overflow-hidden bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-3d-lg transition-all duration-300 group card-3d glow-3d hover-lift-3d transform-style-preserve-3d">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300 depth-2">
             <CheckCircle2 size={80} className="text-green-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-green-200/30 rounded-full blur-xl float-3d depth-1" style={{ animationDelay: '0.5s' }}></div>
           <div className="relative z-10">
-            <div className="text-sm text-green-600 font-bold mb-1 flex items-center gap-1">
-              <CheckCircle2 size={16} /> Successful
+            <div className="text-sm text-green-600 font-bold mb-2 flex items-center gap-2">
+              <CheckCircle2 size={16} />
+              Successful
             </div>
-            <div className="text-3xl font-bold text-green-900">{stats.successfulLogins}</div>
+            <div className="text-4xl font-black text-green-900 mb-2">{stats.successfulLogins}</div>
+            <div className="w-16 h-1 bg-green-400 rounded-full"></div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-4 border border-red-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200 transition-all duration-300 group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300">
             <AlertCircle size={80} className="text-red-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-red-200/30 rounded-full blur-xl"></div>
           <div className="relative z-10">
-            <div className="text-sm text-red-600 font-bold mb-1 flex items-center gap-1">
-              <AlertCircle size={16} /> Failed
+            <div className="text-sm text-red-600 font-bold mb-2 flex items-center gap-2">
+              <AlertCircle size={16} />
+              Failed
             </div>
-            <div className="text-3xl font-bold text-red-900">{stats.failedLogins}</div>
+            <div className="text-4xl font-black text-red-900 mb-2">{stats.failedLogins}</div>
+            <div className="w-16 h-1 bg-red-400 rounded-full"></div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 border border-purple-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+        <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-3d-lg transition-all duration-300 group card-3d glow-3d hover-lift-3d transform-style-preserve-3d">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300">
             <Users size={80} className="text-purple-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-purple-200/30 rounded-full blur-xl"></div>
           <div className="relative z-10">
-            <div className="text-sm text-purple-600 font-bold mb-1 flex items-center gap-1">
-              <Users size={16} /> Unique Users
+            <div className="text-sm text-purple-600 font-bold mb-2 flex items-center gap-2">
+              <Users size={16} />
+              Unique Users
             </div>
-            <div className="text-3xl font-bold text-purple-900">{stats.uniqueUsers}</div>
+            <div className="text-4xl font-black text-purple-900 mb-2">{stats.uniqueUsers}</div>
+            <div className="w-16 h-1 bg-purple-400 rounded-full"></div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4 border border-orange-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+        <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200 transition-all duration-300 group">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300">
             <Calendar size={80} className="text-orange-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-orange-200/30 rounded-full blur-xl"></div>
           <div className="relative z-10">
-            <div className="text-sm text-orange-600 font-bold mb-1 flex items-center gap-1">
-              <Calendar size={16} /> This Week
+            <div className="text-sm text-orange-600 font-bold mb-2 flex items-center gap-2">
+              <Calendar size={16} />
+              This Week
             </div>
-            <div className="text-3xl font-bold text-orange-900">{stats.loginsLastWeek}</div>
+            <div className="text-4xl font-black text-orange-900 mb-2">{stats.loginsLastWeek}</div>
+            <div className="w-16 h-1 bg-orange-400 rounded-full"></div>
           </div>
         </div>
       </div>
     )}
 
     {/* Login Logs Table */}
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-3d border border-gray-100 card-3d glow-3d panel-3d transform-style-preserve-3d">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b">
+          <thead className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">User Name</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Status</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">IP Address</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Login Time</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Action</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">User Name</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Email</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Status</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">IP Address</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Login Time</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Action</th>
             </tr>
           </thead>
-          <tbody className="divide-y">
+          <tbody className="divide-y divide-gray-100">
             {logs?.map((log) => (
-              <tr key={log._id} className="hover:bg-gray-50">
+              <tr key={log._id} className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-3d hover-lift-3d">
                 <td className="px-6 py-4 text-sm text-gray-900 font-medium">{log.userName}</td>
                 <td className="px-6 py-4 text-sm text-gray-600">{log.email}</td>
                 <td className="px-6 py-4 text-sm">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold transform hover:scale-110 transition-transform duration-200 ${
                     log.status === 'success' 
-                      ? 'bg-green-100 text-green-700' 
-                      : 'bg-red-100 text-red-700'
+                      ? 'bg-green-100 text-green-700 hover:bg-green-200' 
+                      : 'bg-red-100 text-red-700 hover:bg-red-200'
                   }`}>
                     {log.status === 'success' ? '✓ Success' : '✗ Failed'}
                   </span>
@@ -601,7 +616,7 @@ const LoginLogsPanel = ({ logs, stats }) => {
                   <button
                     onClick={() => handleDeleteLog(log._id)}
                     disabled={deleteLoading === log._id}
-                    className="text-red-600 hover:text-red-900 font-semibold transition disabled:opacity-50"
+                    className="text-red-600 hover:text-red-900 font-semibold transition disabled:opacity-50 transform hover:scale-110 transition-transform duration-200"
                   >
                     {deleteLoading === log._id ? (
                       <Loader2 size={16} className="inline animate-spin" />
@@ -627,88 +642,103 @@ const UsersPanel = ({ users, stats }) => (
   <div className="space-y-6">
     {/* User Statistics */}
     {stats && (
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 border border-blue-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-6 perspective-1000">
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 hover:shadow-3d-lg transition-all duration-300 group card-3d glow-3d hover-lift-3d transform-style-preserve-3d">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300 depth-2">
             <Users size={80} className="text-blue-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-blue-200/30 rounded-full blur-xl float-3d depth-1"></div>
           <div className="relative z-10">
-            <div className="text-sm text-blue-600 font-bold mb-1 flex items-center gap-1">
-              <Users size={16} /> Total Users
+            <div className="text-sm text-blue-600 font-bold mb-2 flex items-center gap-2">
+              <Users size={16} />
+              Total Users
             </div>
-            <div className="text-3xl font-bold text-blue-900">{stats.totalUsers}</div>
+            <div className="text-4xl font-black text-blue-900 text-3d mb-2">{stats.totalUsers}</div>
+            <div className="w-16 h-1 bg-blue-400 rounded-full"></div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-4 border border-green-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+        <div className="relative overflow-hidden bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border border-green-200 hover:shadow-3d-lg transition-all duration-300 group card-3d glow-3d hover-lift-3d transform-style-preserve-3d">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300 depth-2">
             <CheckCircle2 size={80} className="text-green-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-green-200/30 rounded-full blur-xl float-3d depth-1" style={{ animationDelay: '0.5s' }}></div>
           <div className="relative z-10">
-            <div className="text-sm text-green-600 font-bold mb-1 flex items-center gap-1">
-              <Eye size={16} /> Regular Users
+            <div className="text-sm text-green-600 font-bold mb-2 flex items-center gap-2">
+              <Eye size={16} />
+              Regular Users
             </div>
-            <div className="text-3xl font-bold text-green-900">{stats.regularUsers}</div>
+            <div className="text-4xl font-black text-green-900 text-3d mb-2">{stats.regularUsers}</div>
+            <div className="w-16 h-1 bg-green-400 rounded-full"></div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-4 border border-purple-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+        <div className="relative overflow-hidden bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 hover:shadow-3d-lg transition-all duration-300 group card-3d glow-3d hover-lift-3d transform-style-preserve-3d">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300 depth-2">
             <TrendingUp size={80} className="text-purple-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-purple-200/30 rounded-full blur-xl float-3d depth-1" style={{ animationDelay: '1s' }}></div>
           <div className="relative z-10">
-            <div className="text-sm text-purple-600 font-bold mb-1 flex items-center gap-1">
-              <Activity size={16} /> Admin Users
+            <div className="text-sm text-purple-600 font-bold mb-2 flex items-center gap-2">
+              <Activity size={16} />
+              Admin Users
             </div>
-            <div className="text-3xl font-bold text-purple-900">{stats.adminUsers}</div>
+            <div className="text-4xl font-black text-purple-900 text-3d mb-2">{stats.adminUsers}</div>
+            <div className="w-16 h-1 bg-purple-400 rounded-full"></div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4 border border-orange-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+        <div className="relative overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-6 border border-orange-200 hover:shadow-3d-lg transition-all duration-300 group card-3d glow-3d hover-lift-3d transform-style-preserve-3d">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300 depth-2">
             <Calendar size={80} className="text-orange-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-orange-200/30 rounded-full blur-xl float-3d depth-1" style={{ animationDelay: '1.5s' }}></div>
           <div className="relative z-10">
-            <div className="text-sm text-orange-600 font-bold mb-1 flex items-center gap-1">
-              <Calendar size={16} /> Today
+            <div className="text-sm text-orange-600 font-bold mb-2 flex items-center gap-2">
+              <Calendar size={16} />
+              Today
             </div>
-            <div className="text-3xl font-bold text-orange-900">{stats.usersToday}</div>
+            <div className="text-4xl font-black text-orange-900 text-3d mb-2">{stats.usersToday}</div>
+            <div className="w-16 h-1 bg-orange-400 rounded-full"></div>
           </div>
         </div>
-        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-4 border border-red-200 hover:shadow-lg transition group">
-          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition">
+        <div className="relative overflow-hidden bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200 hover:shadow-3d-lg transition-all duration-300 group card-3d glow-3d hover-lift-3d transform-style-preserve-3d">
+          <div className="absolute top-0 right-0 opacity-10 group-hover:opacity-20 transition-all duration-300 depth-2">
             <TrendingUp size={80} className="text-red-600" />
           </div>
+          <div className="absolute -top-2 -right-2 w-12 h-12 bg-red-200/30 rounded-full blur-xl float-3d depth-1" style={{ animationDelay: '2s' }}></div>
           <div className="relative z-10">
-            <div className="text-sm text-red-600 font-bold mb-1 flex items-center gap-1">
-              <Calendar size={16} /> This Week
+            <div className="text-sm text-red-600 font-bold mb-2 flex items-center gap-2">
+              <Calendar size={16} />
+              This Week
             </div>
-            <div className="text-3xl font-bold text-red-900">{stats.usersThisWeek}</div>
+            <div className="text-4xl font-black text-red-900 text-3d mb-2">{stats.usersThisWeek}</div>
+            <div className="w-16 h-1 bg-red-400 rounded-full"></div>
           </div>
         </div>
       </div>
     )}
 
     {/* Users Table */}
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+    <div className="bg-white rounded-2xl overflow-hidden shadow-3d border border-gray-100 card-3d glow-3d panel-3d transform-style-preserve-3d">
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b">
+          <thead className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Name</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Role</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Stream</th>
-              <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Registered On</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Name</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Email</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Role</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Stream</th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider transform hover:scale-105 transition-transform duration-200">Registered On</th>
             </tr>
           </thead>
-          <tbody className="divide-y">
+          <tbody className="divide-y divide-gray-100">
             {users?.map((user) => (
-              <tr key={user._id} className="hover:bg-gray-50">
+              <tr key={user._id} className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-3d hover-lift-3d">
                 <td className="px-6 py-4 text-sm text-gray-900 font-medium">{user.name}</td>
                 <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
                 <td className="px-6 py-4 text-sm">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold transform hover:scale-110 transition-transform duration-200 ${
                     user.role === 'admin' 
-                      ? 'bg-purple-100 text-purple-700' 
-                      : 'bg-blue-100 text-blue-700'
+                      ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' 
+                      : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
                   }`}>
                     {user.role === 'admin' ? '👨‍💼 Admin' : '👤 User'}
                   </span>

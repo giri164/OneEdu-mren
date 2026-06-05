@@ -67,6 +67,58 @@ const userSchema = new mongoose.Schema({
             default: null
         }
     }],
+    resume: {
+        personalInfo: {
+            fullName: String,
+            email: String,
+            phone: String,
+            address: String,
+            linkedin: String,
+            github: String,
+            website: String
+        },
+        summary: String,
+        experience: [{
+            company: String,
+            position: String,
+            location: String,
+            startDate: String,
+            endDate: String,
+            current: Boolean,
+            description: String
+        }],
+        education: [{
+            institution: String,
+            degree: String,
+            field: String,
+            location: String,
+            startDate: String,
+            endDate: String,
+            current: Boolean,
+            gpa: String
+        }],
+        skills: [String],
+        certifications: [{
+            name: String,
+            issuer: String,
+            date: String,
+            url: String
+        }],
+        projects: [{
+            name: String,
+            description: String,
+            technologies: [String],
+            url: String,
+            github: String
+        }],
+        languages: [{
+            language: String,
+            proficiency: {
+                type: String,
+                enum: ['Beginner', 'Intermediate', 'Advanced', 'Native']
+            }
+        }]
+    },
     createdAt: {
         type: Date,
         default: Date.now

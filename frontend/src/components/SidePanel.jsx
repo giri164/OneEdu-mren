@@ -11,6 +11,7 @@ const SidePanel = () => {
   const [expandedStreams, setExpandedStreams] = useState({});
   const [loading, setLoading] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
 
   useEffect(() => {
     const fetchStreams = async () => {
@@ -48,6 +49,19 @@ const SidePanel = () => {
 
   return (
     <>
+      {/* Hamburger Menu Button */}
+      <button
+        onClick={() => setIsPanelOpen(!isPanelOpen)}
+        className="fixed top-20 left-4 z-50 bg-primary text-white p-2 rounded-lg shadow-lg hover:bg-secondary transition-all duration-300"
+        title={isPanelOpen ? "Close side panel" : "Open side panel"}
+      >
+        <div className="flex flex-col space-y-1">
+          <div className={`w-5 h-0.5 bg-white transition-transform duration-300 ${isPanelOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
+          <div className={`w-5 h-0.5 bg-white transition-opacity duration-300 ${isPanelOpen ? 'opacity-0' : 'opacity-100'}`}></div>
+          <div className={`w-5 h-0.5 bg-white transition-transform duration-300 ${isPanelOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
+        </div>
+      </button>
+
       {/* Mobile Toggle Button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
@@ -67,7 +81,9 @@ const SidePanel = () => {
 
       {/* Side Panel */}
       <aside
-        className="fixed left-0 top-16 h-[calc(100vh-64px)] w-80 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 transition-all duration-300 overflow-y-auto z-40 md:translate-x-0 scrollbar scrollbar-thumb-gray-300 dark:scrollbar-thumb-slate-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-slate-500"
+        className={`fixed left-0 top-16 h-[calc(100vh-64px)] w-80 bg-white dark:bg-slate-900 border-r border-gray-200 dark:border-slate-800 transition-all duration-300 overflow-y-auto z-40 scrollbar scrollbar-thumb-gray-300 dark:scrollbar-thumb-slate-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-slate-500 ${
+          isPanelOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:${isPanelOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <div className="p-6">
           {/* Header */}
@@ -178,7 +194,7 @@ const SidePanel = () => {
       </aside>
 
       {/* Main content spacer on desktop */}
-      <div className="hidden md:block w-80"></div>
+      <div className={`hidden md:block transition-all duration-300 ${isPanelOpen ? 'w-80' : 'w-0'}`}></div>
     </>
   );
 };

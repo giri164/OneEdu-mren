@@ -40,7 +40,7 @@ const seedData = async () => {
         const civil = await Stream.create({
             name: 'Civil Engineering',
             description: 'Infrastructure, construction management, and urban development.',
-            logo: 'https://cdn-icons-png.flaticon.com/512/1524/1524863.png'
+            logo: 'https://www.google.com/imgres?q=civil%20engineering%20images&imgurl=https%3A%2F%2Fwww.clarkson.edu%2Fsites%2Fdefault%2Ffiles%2F2023-05%2FCivil-Engineering-Hero-1600x900.jpg&imgrefurl=https%3A%2F%2Fwww.clarkson.edu%2Facademics%2Fmajors-minors%2Fcivil-engineering&docid=YQamEv2lHxEkoM&tbnid=TAXcD53mztXCOM&vet=12ahUKEwjpqKDPtKOTAxWrWHADHQ0oDtsQnPAOegQIFhAB..i&w=1600&h=900&hcb=2&ved=2ahUKEwjpqKDPtKOTAxWrWHADHQ0oDtsQnPAOegQIFhAB'
         });
         // 4. Electronics & Communication
         const ece = await Stream.create({

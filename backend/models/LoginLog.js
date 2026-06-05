@@ -28,7 +28,7 @@ const loginLogSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['success', 'failed'],
+        enum: ['success', 'failed', 'registration'],
         default: 'success'
     },
     failureReason: {

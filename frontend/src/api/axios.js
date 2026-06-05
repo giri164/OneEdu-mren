@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const API = axios.create({
-  // Use IPv4 loopback to avoid macOS resolving localhost to AirPlay/::1; backend runs on port 4000
-  baseURL: 'http://127.0.0.1:4000/api',
+  // Use environment variable when possible, otherwise default to localhost:4000
+  baseURL: import.meta.env.VITE_API_URL || 'http://127.0.0.1:4000/api',
 });
 
 // Add a request interceptor to include the auth token in headers
