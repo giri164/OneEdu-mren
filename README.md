@@ -59,5 +59,5 @@ OneEdu is a centralized career guidance system designed to help Intermediate and
 - `/backend`: API server, models, controllers, and routes.
 - `/frontend`: React client with Tailwind CSS and context-based state management.
 
-# One-EDU-my
+# One-EDU-smart carrer  
 
